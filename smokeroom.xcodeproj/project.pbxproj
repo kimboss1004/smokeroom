@@ -7,13 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F57CF968618AC9C9172F46B5 /* Pods_smokeroom.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20CCFFB9D50F94848D1AF85F /* Pods_smokeroom.framework */; };
+		FB05A7332188181200DD6EB2 /* RoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB05A7322188181200DD6EB2 /* RoomsViewController.swift */; };
+		FB05A7352188184F00DD6EB2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB05A7342188184F00DD6EB2 /* HomeViewController.swift */; };
+		FB06C1CD2100168000420EBF /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB06C1CC2100168000420EBF /* Helper.swift */; };
 		FB09252520BEF9930071C1E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09252420BEF9930071C1E8 /* AppDelegate.swift */; };
-		FB09252720BEF9930071C1E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09252620BEF9930071C1E8 /* ViewController.swift */; };
-		FB09252A20BEF9930071C1E8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB09252820BEF9930071C1E8 /* Main.storyboard */; };
 		FB09252C20BEF9960071C1E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB09252B20BEF9960071C1E8 /* Assets.xcassets */; };
-		FB09252F20BEF9960071C1E8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FB09252D20BEF9960071C1E8 /* LaunchScreen.storyboard */; };
 		FB09253A20BEF9960071C1E8 /* smokeroomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09253920BEF9960071C1E8 /* smokeroomTests.swift */; };
 		FB09254520BEF9960071C1E8 /* smokeroomUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09254420BEF9960071C1E8 /* smokeroomUITests.swift */; };
+		FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09255420BF07DD0071C1E8 /* anchorExtension.swift */; };
+		FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990320E6BB4200BDD2DD /* CommentViewController.swift */; };
+		FB10990620E80A8900BDD2DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */; };
+		FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990720E80FD400BDD2DD /* RegisterViewController.swift */; };
+		FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990920E8118300BDD2DD /* RegisterViews.swift */; };
+		FB8CDC3520E0101D008EDBF4 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */; };
+		FB8CDC3920E036BF008EDBF4 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */; };
+		FB8CDC3B20E03808008EDBF4 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */; };
+		FB8CDC3D20E03956008EDBF4 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */; };
+		FB9AD0FC20DB17FB002C0C0B /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD0FB20DB17FB002C0C0B /* SettingViewController.swift */; };
+		FB9AD0FE20DB28C0002C0C0B /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD0FD20DB28C0002C0C0B /* FriendsViewController.swift */; };
+		FB9AD10020DB298D002C0C0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD0FF20DB298D002C0C0B /* User.swift */; };
+		FB9AD10220DB2F9D002C0C0B /* FriendsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */; };
+		FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9E3DF42183F88900F05E5A /* Comment.swift */; };
+		FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC8C61620D0340600E5BD19 /* CreateViewController.swift */; };
+		FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */; };
+		FBF9D4EB20C47722009A189E /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EA20C47722009A189E /* Conversation.swift */; };
+		FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EF20C484AE009A189E /* AccountViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,12 +53,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		20CCFFB9D50F94848D1AF85F /* Pods_smokeroom.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_smokeroom.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		27F641FA598210A34DED38E8 /* Pods_smokeroomTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_smokeroomTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4277AF8F3A2BC79922854D5D /* Pods_smokeroomUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_smokeroomUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C25B6CAA863DE2F4D4A59EBD /* Pods-smokeroom.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smokeroom.debug.xcconfig"; path = "Pods/Target Support Files/Pods-smokeroom/Pods-smokeroom.debug.xcconfig"; sourceTree = "<group>"; };
+		ED78583990B975F7716B6CD6 /* Pods-smokeroom.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smokeroom.release.xcconfig"; path = "Pods/Target Support Files/Pods-smokeroom/Pods-smokeroom.release.xcconfig"; sourceTree = "<group>"; };
+		FB05A7322188181200DD6EB2 /* RoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsViewController.swift; sourceTree = "<group>"; };
+		FB05A7342188184F00DD6EB2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		FB06C1CC2100168000420EBF /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		FB09252120BEF9930071C1E8 /* smokeroom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smokeroom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB09252420BEF9930071C1E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FB09252620BEF9930071C1E8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		FB09252920BEF9930071C1E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FB09252B20BEF9960071C1E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FB09252E20BEF9960071C1E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FB09253020BEF9960071C1E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB09253520BEF9960071C1E8 /* smokeroomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = smokeroomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB09253920BEF9960071C1E8 /* smokeroomTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smokeroomTests.swift; sourceTree = "<group>"; };
@@ -47,6 +71,24 @@
 		FB09254020BEF9960071C1E8 /* smokeroomUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = smokeroomUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB09254420BEF9960071C1E8 /* smokeroomUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smokeroomUITests.swift; sourceTree = "<group>"; };
 		FB09254620BEF9960071C1E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB09255420BF07DD0071C1E8 /* anchorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = anchorExtension.swift; sourceTree = "<group>"; };
+		FB10990320E6BB4200BDD2DD /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FB10990720E80FD400BDD2DD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		FB10990920E8118300BDD2DD /* RegisterViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViews.swift; sourceTree = "<group>"; };
+		FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
+		FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
+		FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
+		FB9AD0FB20DB17FB002C0C0B /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		FB9AD0FD20DB28C0002C0C0B /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		FB9AD0FF20DB298D002C0C0B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCell.swift; sourceTree = "<group>"; };
+		FB9E3DF42183F88900F05E5A /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		FBC8C61620D0340600E5BD19 /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
+		FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		FBF9D4EA20C47722009A189E /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		FBF9D4EF20C484AE009A189E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F57CF968618AC9C9172F46B5 /* Pods_smokeroom.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +117,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A18336C49B9DC56C93661188 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C25B6CAA863DE2F4D4A59EBD /* Pods-smokeroom.debug.xcconfig */,
+				ED78583990B975F7716B6CD6 /* Pods-smokeroom.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		DBBCEC1FB6A1A9CF58061140 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				20CCFFB9D50F94848D1AF85F /* Pods_smokeroom.framework */,
+				27F641FA598210A34DED38E8 /* Pods_smokeroomTests.framework */,
+				4277AF8F3A2BC79922854D5D /* Pods_smokeroomUITests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FB09251820BEF9930071C1E8 = {
 			isa = PBXGroup;
 			children = (
@@ -81,6 +143,8 @@
 				FB09253820BEF9960071C1E8 /* smokeroomTests */,
 				FB09254320BEF9960071C1E8 /* smokeroomUITests */,
 				FB09252220BEF9930071C1E8 /* Products */,
+				A18336C49B9DC56C93661188 /* Pods */,
+				DBBCEC1FB6A1A9CF58061140 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,11 +162,14 @@
 			isa = PBXGroup;
 			children = (
 				FB09252420BEF9930071C1E8 /* AppDelegate.swift */,
-				FB09252620BEF9930071C1E8 /* ViewController.swift */,
-				FB09252820BEF9930071C1E8 /* Main.storyboard */,
+				FB06C1CC2100168000420EBF /* Helper.swift */,
+				FB09255420BF07DD0071C1E8 /* anchorExtension.swift */,
+				FBF9D4EE20C47F3B009A189E /* views */,
+				FBF9D4ED20C47F2F009A189E /* models */,
+				FBF9D4EC20C47F08009A189E /* controllers */,
 				FB09252B20BEF9960071C1E8 /* Assets.xcassets */,
-				FB09252D20BEF9960071C1E8 /* LaunchScreen.storyboard */,
 				FB09253020BEF9960071C1E8 /* Info.plist */,
+				FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */,
 			);
 			path = smokeroom;
 			sourceTree = "<group>";
@@ -125,6 +192,45 @@
 			path = smokeroomUITests;
 			sourceTree = "<group>";
 		};
+		FBF9D4EC20C47F08009A189E /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FB05A7342188184F00DD6EB2 /* HomeViewController.swift */,
+				FB05A7322188181200DD6EB2 /* RoomsViewController.swift */,
+				FBF9D4EF20C484AE009A189E /* AccountViewController.swift */,
+				FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */,
+				FBC8C61620D0340600E5BD19 /* CreateViewController.swift */,
+				FB9AD0FB20DB17FB002C0C0B /* SettingViewController.swift */,
+				FB9AD0FD20DB28C0002C0C0B /* FriendsViewController.swift */,
+				FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */,
+				FB10990320E6BB4200BDD2DD /* CommentViewController.swift */,
+				FB10990720E80FD400BDD2DD /* RegisterViewController.swift */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		FBF9D4ED20C47F2F009A189E /* models */ = {
+			isa = PBXGroup;
+			children = (
+				FBF9D4EA20C47722009A189E /* Conversation.swift */,
+				FB9AD0FF20DB298D002C0C0B /* User.swift */,
+				FB9E3DF42183F88900F05E5A /* Comment.swift */,
+			);
+			path = models;
+			sourceTree = "<group>";
+		};
+		FBF9D4EE20C47F3B009A189E /* views */ = {
+			isa = PBXGroup;
+			children = (
+				FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */,
+				FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */,
+				FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */,
+				FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */,
+				FB10990920E8118300BDD2DD /* RegisterViews.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -132,9 +238,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = FB09254920BEF9960071C1E8 /* Build configuration list for PBXNativeTarget "smokeroom" */;
 			buildPhases = (
+				348C971FE398C9A80786B40F /* [CP] Check Pods Manifest.lock */,
 				FB09251D20BEF9930071C1E8 /* Sources */,
 				FB09251E20BEF9930071C1E8 /* Frameworks */,
 				FB09251F20BEF9930071C1E8 /* Resources */,
+				CD84709CF99392145F915CE7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -229,9 +337,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB09252F20BEF9960071C1E8 /* LaunchScreen.storyboard in Resources */,
 				FB09252C20BEF9960071C1E8 /* Assets.xcassets in Resources */,
-				FB09252A20BEF9930071C1E8 /* Main.storyboard in Resources */,
+				FB10990620E80A8900BDD2DD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,13 +358,89 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		348C971FE398C9A80786B40F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-smokeroom-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CD84709CF99392145F915CE7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-smokeroom/Pods-smokeroom-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-ProtoRPC/ProtoRPC.framework",
+				"${BUILT_PRODUCTS_DIR}/gRPC-RxLibrary/RxLibrary.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ProtoRPC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxLibrary.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-smokeroom/Pods-smokeroom-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		FB09251D20BEF9930071C1E8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB09252720BEF9930071C1E8 /* ViewController.swift in Sources */,
+				FB8CDC3520E0101D008EDBF4 /* ConversationViewController.swift in Sources */,
 				FB09252520BEF9930071C1E8 /* AppDelegate.swift in Sources */,
+				FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */,
+				FB8CDC3D20E03956008EDBF4 /* CommentsCell.swift in Sources */,
+				FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */,
+				FB05A7352188184F00DD6EB2 /* HomeViewController.swift in Sources */,
+				FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */,
+				FB06C1CD2100168000420EBF /* Helper.swift in Sources */,
+				FB9AD0FC20DB17FB002C0C0B /* SettingViewController.swift in Sources */,
+				FB9AD0FE20DB28C0002C0C0B /* FriendsViewController.swift in Sources */,
+				FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */,
+				FB05A7332188181200DD6EB2 /* RoomsViewController.swift in Sources */,
+				FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */,
+				FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */,
+				FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */,
+				FB9AD10220DB2F9D002C0C0B /* FriendsCell.swift in Sources */,
+				FB8CDC3920E036BF008EDBF4 /* HeaderCell.swift in Sources */,
+				FB9AD10020DB298D002C0C0B /* User.swift in Sources */,
+				FB8CDC3B20E03808008EDBF4 /* ConversationCell.swift in Sources */,
+				FBF9D4EB20C47722009A189E /* Conversation.swift in Sources */,
+				FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,25 +474,6 @@
 			targetProxy = FB09254120BEF9960071C1E8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		FB09252820BEF9930071C1E8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FB09252920BEF9930071C1E8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		FB09252D20BEF9960071C1E8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FB09252E20BEF9960071C1E8 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		FB09254720BEF9960071C1E8 /* Debug */ = {
@@ -428,9 +592,11 @@
 		};
 		FB09254A20BEF9960071C1E8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C25B6CAA863DE2F4D4A59EBD /* Pods-smokeroom.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M4LV7HBRL7;
 				INFOPLIST_FILE = smokeroom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -445,9 +611,11 @@
 		};
 		FB09254B20BEF9960071C1E8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ED78583990B975F7716B6CD6 /* Pods-smokeroom.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = M4LV7HBRL7;
 				INFOPLIST_FILE = smokeroom/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
