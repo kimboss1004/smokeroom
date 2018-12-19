@@ -42,6 +42,7 @@ class CommentsCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(red: 130/255, green: 130/255, blue: 130/255, alpha: 1.0)
         label.numberOfLines = 0
+        label.textAlignment = .right
         return label
     }()
     
@@ -49,7 +50,7 @@ class CommentsCell: UICollectionViewCell {
         let textView = UITextView()
         textView.text = "How many comments does the top of the this post deserve now that the penthouse monkeys arent here. Now we got penthouse tigers. "
         textView.isEditable = false
-        textView.font = UIFont.systemFont(ofSize: 20.0)
+        textView.font = UIFont.systemFont(ofSize: 17.0)
         textView.textColor = .black
         return textView
     }()
@@ -70,7 +71,7 @@ class CommentsCell: UICollectionViewCell {
         addSubview(usernameLabel)
         addSubview(dateLabel)
         addSubview(textLabel)
-        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 100, heightConstant: 35)
+        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 80, heightConstant: 35)
         profile.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 3, leftConstant: 15, bottomConstant: 0, rightConstant: 0, widthConstant: 65, heightConstant: 65)
         nameLabel.anchor(topAnchor, left: profile.rightAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 12, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)
         usernameLabel.anchor(topAnchor, left: nameLabel.rightAnchor, bottom: nil, right: dateLabel.leftAnchor, topConstant: 0, leftConstant: 5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)

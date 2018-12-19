@@ -28,18 +28,34 @@ class Helper {
         let formatter = DateFormatter()
         // initially set the format based on your datepicker date / server String
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        
+ 
         let myString = formatter.string(from: Date()) // string purpose I add here
         // convert your string to date
-        let yourDate = formatter.date(from: myString)
+        //let yourDate = formatter.date(from: myString)
         //then again set the date format whhich type of output you need
-        formatter.dateFormat = "dd-MMM-yyyy"
+        //formatter.dateFormat = "dd-MMM-yyyy"
         // again convert your date to string
-        let myStringafd = formatter.string(from: yourDate!)
-        
-        return myStringafd
+        //let myStringafd = formatter.string(from: yourDate!)
+
+        return myString
     }
     
+    func formatStringToUserTime(stringDate: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        if let date = dateFormatter.date(from: stringDate){
+            dateFormatter.dateFormat = "h:mm a"
+            let elapsedTimeInSeconds = Date().timeIntervalSince(date)
+            let secondInDays: TimeInterval = 60 * 60 * 24
+            if elapsedTimeInSeconds > 7 * secondInDays {
+                dateFormatter.dateFormat = "MM/dd/yy"
+            } else if elapsedTimeInSeconds > secondInDays {
+                dateFormatter.dateFormat = "EEE"
+            }
+            return dateFormatter.string(from: date)
+        }
+        return dateFormatter.string(from: Date())
+    }
     
     
 }

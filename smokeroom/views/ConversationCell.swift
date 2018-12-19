@@ -10,10 +10,7 @@ import UIKit
 
 class ConversationCell: UICollectionViewCell {
     
-    var detailStackView: UIStackView
-    
     override init(frame: CGRect) {
-        detailStackView = UIStackView()
         super.init(frame: frame)
         setupViews()
         backgroundColor = .white
@@ -25,7 +22,7 @@ class ConversationCell: UICollectionViewCell {
     
     let profile: UIButton = {
         let button = UIButton()
-        button.setImage( #imageLiteral(resourceName: "whale"), for: .normal)
+        button.setImage( #imageLiteral(resourceName: "profile_image"), for: .normal)
         return button
     }()
     
@@ -54,6 +51,7 @@ class ConversationCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(red: 130/255, green: 130/255, blue: 130/255, alpha: 1.0)
         label.numberOfLines = 0
+        label.textAlignment = .right
         return label
     }()
     
@@ -72,9 +70,9 @@ class ConversationCell: UICollectionViewCell {
     let buzz: UILabel = {
         let label = UILabel()
         label.text = "Buzz: 0"
-        label.font = UIFont.systemFont(ofSize: 14.0)
+        label.font = UIFont.systemFont(ofSize: 12.0)
+        label.textColor = UIColor(red: 31.0/255.0, green: 111.0/255.0, blue: 239.0/255.0, alpha: 1.0)
         label.baselineAdjustment = .alignCenters
-        label.textAlignment = .left
         return label
     }()
     
@@ -84,26 +82,13 @@ class ConversationCell: UICollectionViewCell {
         addSubview(dateLabel)
         addSubview(textLabel)
         addSubview(usernameLabel)
-        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 100, heightConstant: 35)
-        profile.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 15, bottomConstant: 0, rightConstant: 0, widthConstant: 65, heightConstant: 65)
+        addSubview(buzz)
+        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 70, heightConstant: 35)
+        profile.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 15, bottomConstant: 0, rightConstant: 0, widthConstant: 55, heightConstant: 55)
         nameLabel.anchor(topAnchor, left: profile.rightAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)
         usernameLabel.anchor(topAnchor, left: nameLabel.rightAnchor, bottom: nil, right: dateLabel.leftAnchor, topConstant: 0, leftConstant: 5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)
-        setupBottomDetails()
         textLabel.anchor(nameLabel.bottomAnchor, left: profile.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 10, bottomConstant: 0, rightConstant: 4, widthConstant: 0, heightConstant: 0)
-    }
-    
-    fileprivate func setupBottomDetails(){
-        let buzzContainer = UIView()
-        detailStackView = UIStackView(arrangedSubviews: [buzzContainer])
-        detailStackView.axis = .horizontal
-        detailStackView.distribution = .fillEqually
-        
-        addSubview(detailStackView)
-        addSubview(buzz)
-        
-        detailStackView.anchor(nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 7, rightConstant: 0, widthConstant: 0, heightConstant: 20)
-        buzz.anchor(buzzContainer.topAnchor, left: buzzContainer.leftAnchor, bottom: nil, right: buzzContainer.rightAnchor, topConstant: 0, leftConstant: 90, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 20)
-        
+        buzz.anchor(nil, left: nameLabel.leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 5, bottomConstant: 7, rightConstant: 0, widthConstant: 0, heightConstant: 20)
     }
     
 

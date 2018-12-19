@@ -1,0 +1,11 @@
+framework module OpenSansSwift {
+  umbrella header "OpenSansSwift.h"
+
+  export *
+  module * { export * }
+}
+
+module OpenSansSwift.Swift {
+    header "OpenSansSwift-Swift.h"
+    requires objc
+}

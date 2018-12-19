@@ -14,7 +14,7 @@ class Conversation {
     let text: String
     let userid: String
     let ghostname: Bool
-    let buzz: Int
+    var buzz: Int
     let views: Int
     let date: String
     
@@ -33,7 +33,7 @@ class Conversation {
         self.ghostname = ghostname
         self.buzz = buzz
         self.views = 0
-        self.date = date
+        self.date = Helper.shared.formatStringToUserTime(stringDate: date)
     }
     
     init(snapshot : DataSnapshot){

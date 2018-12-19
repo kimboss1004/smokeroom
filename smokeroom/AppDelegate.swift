@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import InstantSearchClient
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -16,8 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        let db = Firestore.firestore()
+        let settings = db.settings
+        let client = Client(appID: "NZJAE708OM", apiKey: "YourAPIKey")
+        let index = client.index(withName: "your_index_name")
         
-        
+        settings.areTimestampsInSnapshotsEnabled = true
+        db.settings = settings
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.rootViewController = HomeViewController()
         window!.makeKeyAndVisible()

@@ -11,12 +11,11 @@ import Firebase
 
 class HomeViewController: UIViewController {
     
-    // NAVIGATION -------------------------------
-    
-    
+
     // Child View Controllers --------------------
     lazy var accountVC: AccountViewController = {
         let vc = AccountViewController()
+        vc.accountid = Auth.auth().currentUser?.uid
         return vc
     }()
     
@@ -28,6 +27,16 @@ class HomeViewController: UIViewController {
     lazy var roomsVC: RoomsViewController = {
         let vc = RoomsViewController()
         return vc
+    }()
+    
+    lazy var settingVC: SettingViewController = {
+        let view = SettingViewController()
+        return view
+    }()
+    
+    lazy var friendsVC: FriendsViewController = {
+       let view = FriendsViewController()
+        return view
     }()
     
     let titleImageView: UIImageView = {
@@ -54,6 +63,33 @@ class HomeViewController: UIViewController {
         return button
     }()
     
+    let settingsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Settings", for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 30)!
+        button.backgroundColor = .blue
+        button.addTarget(self, action: #selector(settingsButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let friendsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Friends", for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 30)!
+        button.backgroundColor = .purple
+        button.addTarget(self, action: #selector(friendsButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    let accountButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Account", for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 30)!
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(accountButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
     
     
     
@@ -63,14 +99,32 @@ class HomeViewController: UIViewController {
         view.addSubview(titleImageView)
         view.addSubview(titleLabel)
         view.addSubview(roomsButton)
+        view.addSubview(settingsButton)
+        view.addSubview(friendsButton)
+        view.addSubview(accountButton)
         titleImageView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 50, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         titleLabel.anchor(titleImageView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         roomsButton.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
+        settingsButton.anchor(roomsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
+        friendsButton.anchor(settingsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
+        accountButton.anchor(friendsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
     }
     
     
     @objc func roomsButtonAction(_ sender: UIButton!){
         self.present(roomsVC, animated: true, completion:  nil)
+    }
+    
+    @objc func settingsButtonAction(_ sender: UIButton!){
+        self.present(settingVC, animated: true, completion:  nil)
+    }
+    
+    @objc func friendsButtonAction(_ sender: UIButton!){
+        self.present(friendsVC, animated: true, completion:  nil)
+    }
+    
+    @objc func accountButtonAction(_ sender: UIButton!){
+        self.present(accountVC, animated: true, completion:  nil)
     }
     
     /*

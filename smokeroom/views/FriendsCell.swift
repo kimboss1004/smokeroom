@@ -11,11 +11,9 @@ import UIKit
 
 class FriendsCell: UICollectionViewCell {
     
-    
-    let nameButton: UIButton = {
+    let profile: UIButton = {
         let button = UIButton()
-        button.setTitle("Austin Kim", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setImage( #imageLiteral(resourceName: "profile_image"), for: .normal)
         return button
     }()
     
@@ -24,6 +22,17 @@ class FriendsCell: UICollectionViewCell {
         button.setTitle("@kimbossthunder", for: .normal)
         button.contentHorizontalAlignment = .left
         button.setTitleColor(.black, for: .normal)
+        button.contentVerticalAlignment = UIControlContentVerticalAlignment.bottom
+        return button
+    }()
+    
+    let nameButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Austin Kim", for: .normal)
+        button.contentHorizontalAlignment = .left
+        button.setTitleColor(UIColor(red: 130/255, green: 130/255, blue: 130/255, alpha: 1.0), for: .normal)
+        button.titleLabel?.font = UIFont(name: "Avenir", size: 15)!
+        button.contentVerticalAlignment = UIControlContentVerticalAlignment.top
         return button
     }()
     
@@ -43,11 +52,13 @@ class FriendsCell: UICollectionViewCell {
     }
     
     func setupViews(){
+        addSubview(profile)
         addSubview(nameButton)
         addSubview(usernameButton)
         addSubview((rightArrow))
-        nameButton.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 150, heightConstant: 0)
-        usernameButton.anchor(topAnchor, left: nameButton.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        profile.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 80)
+        usernameButton.anchor(topAnchor, left: profile.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        nameButton.anchor(nil, left: usernameButton.leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 40)
         rightArrow.anchor(topAnchor, left: nil, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 0, heightConstant: 0)
         backgroundColor = .white
         

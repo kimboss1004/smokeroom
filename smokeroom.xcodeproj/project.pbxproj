@@ -16,6 +16,8 @@
 		FB09253A20BEF9960071C1E8 /* smokeroomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09253920BEF9960071C1E8 /* smokeroomTests.swift */; };
 		FB09254520BEF9960071C1E8 /* smokeroomUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09254420BEF9960071C1E8 /* smokeroomUITests.swift */; };
 		FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09255420BF07DD0071C1E8 /* anchorExtension.swift */; };
+		FB1007CB21C9B77100ABE789 /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1007CA21C9B77100ABE789 /* AccountHeader.swift */; };
+		FB1007D121CAAAB400ABE789 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1007D021CAAAB400ABE789 /* SearchViewController.swift */; };
 		FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990320E6BB4200BDD2DD /* CommentViewController.swift */; };
 		FB10990620E80A8900BDD2DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */; };
 		FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990720E80FD400BDD2DD /* RegisterViewController.swift */; };
@@ -72,6 +74,8 @@
 		FB09254420BEF9960071C1E8 /* smokeroomUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smokeroomUITests.swift; sourceTree = "<group>"; };
 		FB09254620BEF9960071C1E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB09255420BF07DD0071C1E8 /* anchorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = anchorExtension.swift; sourceTree = "<group>"; };
+		FB1007CA21C9B77100ABE789 /* AccountHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
+		FB1007D021CAAAB400ABE789 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		FB10990320E6BB4200BDD2DD /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FB10990720E80FD400BDD2DD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -197,14 +201,15 @@
 			children = (
 				FB05A7342188184F00DD6EB2 /* HomeViewController.swift */,
 				FB05A7322188181200DD6EB2 /* RoomsViewController.swift */,
-				FBF9D4EF20C484AE009A189E /* AccountViewController.swift */,
-				FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */,
+				FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */,
 				FBC8C61620D0340600E5BD19 /* CreateViewController.swift */,
+				FBF9D4EF20C484AE009A189E /* AccountViewController.swift */,
 				FB9AD0FB20DB17FB002C0C0B /* SettingViewController.swift */,
 				FB9AD0FD20DB28C0002C0C0B /* FriendsViewController.swift */,
-				FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */,
-				FB10990320E6BB4200BDD2DD /* CommentViewController.swift */,
+				FB1007D021CAAAB400ABE789 /* SearchViewController.swift */,
 				FB10990720E80FD400BDD2DD /* RegisterViewController.swift */,
+				FB10990320E6BB4200BDD2DD /* CommentViewController.swift */,
+				FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */,
 			);
 			path = controllers;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 				FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */,
 				FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */,
 				FB10990920E8118300BDD2DD /* RegisterViews.swift */,
+				FB1007CA21C9B77100ABE789 /* AccountHeader.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -387,6 +393,7 @@
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/InstantSearchClient/InstantSearchClient.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
@@ -400,6 +407,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearchClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
@@ -426,12 +434,14 @@
 				FB8CDC3D20E03956008EDBF4 /* CommentsCell.swift in Sources */,
 				FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */,
 				FB05A7352188184F00DD6EB2 /* HomeViewController.swift in Sources */,
+				FB1007CB21C9B77100ABE789 /* AccountHeader.swift in Sources */,
 				FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */,
 				FB06C1CD2100168000420EBF /* Helper.swift in Sources */,
 				FB9AD0FC20DB17FB002C0C0B /* SettingViewController.swift in Sources */,
 				FB9AD0FE20DB28C0002C0C0B /* FriendsViewController.swift in Sources */,
 				FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */,
 				FB05A7332188181200DD6EB2 /* RoomsViewController.swift in Sources */,
+				FB1007D121CAAAB400ABE789 /* SearchViewController.swift in Sources */,
 				FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */,
 				FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */,
 				FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */,

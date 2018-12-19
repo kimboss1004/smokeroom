@@ -12,10 +12,12 @@ import Firebase
 class ConversationViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     var collectionView: UICollectionView!
-    
+    let db = Firestore.firestore()
+    var ref: DocumentReference? = nil
     var conversation: Conversation!
     var conversationid: String!
     var allComments: [Comment]! = [Comment]()
+    var bottomConstraint: NSLayoutConstraint?
     
     var usersReference: CollectionReference!
     
@@ -26,7 +28,7 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
     
     let nav: UIView = {
        let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.0, green: 170.0/255, blue: 232.0/255, alpha: 1.0)
         return view
     }()
     
@@ -34,38 +36,122 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         let button = UIButton()
         button.setTitle("Back", for: .normal)
         button.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         return button
+    }()
+    
+    let titleImageView: UIImageView = {
+        let imageView =  UIImageView(image: #imageLiteral(resourceName: "logo"))
+        imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    let commentBarView: UIView = {
+        let view = UIView()
+        view.tag = 100
+        view.backgroundColor = .white
+        return view
+    }()
+    
+    let commentTextField: UITextField = {
+       let textfield = UITextField()
+        textfield.placeholder = "Enter message..."
+        return textfield
+    }()
+    
+    let topBorderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor(red: 0.9176, green: 0.9176, blue: 0.9176, alpha: 1.0)
+        return view
     }()
     
     let commentButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Comment", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
-        button.setTitleColor(UIColor(red: 0, green: 0.5373, blue: 0.949, alpha: 1.0), for: .normal)
+        //button.backgroundColor = UIColor(red: 0/255, green: 154/255, blue: 237/255, alpha: 1.0)
+        button.setImage(#imageLiteral(resourceName: "send"), for: .normal)
+        //button.titleLabel?.font = UIFont(name: "GillSans-SemiBold", size: 17)!
+        //button.setTitle("Send", for: .normal)
+        button.layer.cornerRadius = 6
         button.addTarget(self, action: #selector(commentButtonAction(_:)), for: .touchUpInside)
         return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        usersReference = Firestore.firestore().collection("users")
-        setupCollectionView()
-        fetchComments()
-        view.addSubview(nav)
-        nav.addSubview(backButton)
-        nav.addSubview(commentButton)
-        view.addSubview(collectionView)
-        view.backgroundColor = UIColor(red: 220.0/255.0, green: 229.0/255.0, blue: 244.0/255.0, alpha: 1.0)
-        
-        nav.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 75)
-        backButton.anchor(nav.topAnchor, left: nav.leftAnchor, bottom: nav.bottomAnchor, right: nil, topConstant: 20, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 100, heightConstant: 0)
-        commentButton.anchor(nav.topAnchor, left: nil, bottom: nav.bottomAnchor, right: nav.rightAnchor, topConstant: 20, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 100, heightConstant: 0)
-        collectionView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 80, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+    let ghostButton: UIButton = {
+        let button = UIButton()
+        button.setImage(#imageLiteral(resourceName: "ghost"), for: .normal)
+        button.layer.cornerRadius = 6
+        button.addTarget(self, action: #selector(ghostCommentButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func commentButtonAction(_ sender:UIButton!){
+        if(commentTextField.text == ""){
+            Helper.shared.showOKAlert(title: "Invalid", message: "Please enter text", viewController: self)
+        }
+        else{
+            let comment = Comment(text: commentTextField.text!, userid: (Auth.auth().currentUser?.uid)!, ghostname: false, conversationid: conversationid)
+            ref = db.collection("comments").addDocument(data: comment.toAnyObject() as! [String : Any]
+            ) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                }
+            }
+            conversation.buzz += 1
+            db.collection("conversations").document(conversationid).updateData(["buzz": conversation.buzz]) { (error) in
+                if error != nil {
+                    print(error?.localizedDescription as Any)
+                }
+            }
+            commentTextField.text = ""
+            fetchComments(scroll: true)
+            commentTextField.endEditing(true)
+
+        }
+    }
+    
+    @objc func ghostCommentButtonAction(_ sender:UIButton!){
+        if(commentTextField.text == ""){
+            Helper.shared.showOKAlert(title: "Invalid", message: "Please enter text", viewController: self)
+        }
+        else{
+            let comment = Comment(text: commentTextField.text!, userid: (Auth.auth().currentUser?.uid)!, ghostname: true, conversationid: conversationid)
+            ref = db.collection("comments").addDocument(data: comment.toAnyObject() as! [String : Any]
+            ) { err in
+                if let err = err {
+                    print("Error adding document: \(err)")
+                }
+            }
+            conversation.buzz += 1
+            db.collection("conversations").document(conversationid).updateData(["buzz" : self.conversation.buzz])
+            commentTextField.text = ""
+            fetchComments(scroll: true)
+            commentTextField.endEditing(true)
+        }
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let userinfo = notification.userInfo {
+            if let keyboardFrame = userinfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+                commentBarView.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 8, bottomConstant: keyboardFrame.cgRectValue.height, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let viewWithTag = self.view.viewWithTag(100) {
+            viewWithTag.removeFromSuperview()
+        }
+        view.addSubview(commentBarView)
+        commentBarView.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
     }
     
     
     // CollectionView methods ----------------------------------------------------------------------------
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        commentTextField.endEditing(true)
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let approximateWidthOfBioTextView = view.frame.width - 180;
@@ -152,7 +238,6 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         return reusableView!
     }
 
-    
     func setupCollectionView(){
         // create collections view for conversations
         let layout = UICollectionViewFlowLayout()
@@ -168,18 +253,13 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func commentButtonAction(_ sender:UIButton!){
-        commentsVC.conversationid = conversationid
-        commentsVC.conversation = self.conversation
-        self.present(commentsVC, animated: true, completion: nil)
-    }
     
     override func viewDidAppear(_ animated: Bool) {
         fetchComments()
     }
     
-    private func fetchComments() {
-        let query = Firestore.firestore().collection("comments").whereField("conversationid", isEqualTo: conversationid as Any)
+    private func fetchComments(scroll: Bool = false) {
+        let query = Firestore.firestore().collection("comments").whereField("conversationid", isEqualTo: conversationid as Any).order(by: "date")
         query.getDocuments { (snapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -187,12 +267,48 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
                 self.allComments = []
                 for document in snapshot!.documents {
                     let data = document.data()
-                    self.allComments.append(Comment(text: data["text"] as! String, userid: data["userid"] as! String, ghostname: data["ghostname"] as! Bool, conversationid: data["conversationid"] as! String, date: data["date"] as! String))
+                    self.allComments.append(Comment(text: data["text"] as! String, userid: data["userid"] as! String, ghostname: data["ghostname"] as! Bool, conversationid: data["conversationid"] as! String, date: Helper.shared.formatStringToUserTime(stringDate: data["date"] as! String)))
                 }
-                self.allComments = self.allComments.reversed()
                 self.collectionView.reloadData()
+                if scroll {
+                    if self.allComments.count != 0 {
+                        let indexPath = IndexPath(item: self.allComments.count-1, section: 0)
+                        self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
+                    }
+                }
             }
         }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        usersReference = db.collection("users")
+        setupCollectionView()
+        fetchComments()
+        view.addSubview(nav)
+        nav.addSubview(titleImageView)
+        nav.addSubview(backButton)
+        view.addSubview(collectionView)
+        view.addSubview(commentBarView)
+        view.backgroundColor = UIColor(red: 220.0/255.0, green: 229.0/255.0, blue: 244.0/255.0, alpha: 1.0)
+        
+        nav.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 75)
+        titleImageView.anchor(nav.topAnchor, left: nav.leftAnchor, bottom: nav.bottomAnchor, right: nav.rightAnchor, topConstant: 20, leftConstant: 0, bottomConstant: 5, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        backButton.anchor(nav.topAnchor, left: nav.leftAnchor, bottom: nav.bottomAnchor, right: nil, topConstant: 20, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 100, heightConstant: 0)
+        commentBarView.anchor(nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        commentBarView.addSubview(commentTextField)
+        commentBarView.addSubview(commentButton)
+        commentBarView.addSubview(ghostButton)
+        commentBarView.addSubview(topBorderView)
+        commentButton.anchor(commentBarView.topAnchor, left: nil, bottom: commentBarView.bottomAnchor, right: commentBarView.rightAnchor, topConstant: 10, leftConstant: 8, bottomConstant: 10, rightConstant: 5, widthConstant: 40, heightConstant: 0)
+        ghostButton.anchor(commentBarView.topAnchor, left: nil, bottom: commentBarView.bottomAnchor, right: commentButton.leftAnchor, topConstant: 5, leftConstant: 0, bottomConstant: 5, rightConstant: 12, widthConstant: 40, heightConstant: 40)
+        commentTextField.anchor(commentBarView.topAnchor, left: commentBarView.leftAnchor, bottom: commentBarView.bottomAnchor, right: ghostButton.leftAnchor, topConstant: 0, leftConstant: 8, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        topBorderView.anchor(commentBarView.topAnchor, left: commentBarView.leftAnchor, bottom: nil, right: commentBarView.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 1)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        
+        collectionView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 80, leftConstant: 0, bottomConstant: 50, rightConstant: 0, widthConstant: 0, heightConstant: 0)
     }
     
 }

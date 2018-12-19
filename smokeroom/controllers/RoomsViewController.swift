@@ -27,21 +27,18 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         return view
     }()
     
-    var currentUser: User!
-    
     var usersReference: CollectionReference!
-    
     
     // Top Navbar items --------------------------------------
     let header: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.0, green: 170.0/255, blue: 232.0/255, alpha: 1.0)
         return view
     }()
     
     let composeButton: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "compose"), for: .normal)
+        button.setTitle("Post", for: .normal)
         button.frame.size = CGSize(width: 40, height: 40)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(createButtonAction(_:)), for: .touchUpInside)
@@ -51,22 +48,20 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     let homeButton: UIButton = {
         let button = UIButton()
         button.setTitle("Home", for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.frame.size = CGSize(width: 40, height: 40)
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(homeClickedButton(_:)), for: .touchUpInside)
-        button.setTitleColor(.black, for: .normal)
         return button
     }()
     
     let titleImageView: UIImageView = {
         let imageView =  UIImageView(image: #imageLiteral(resourceName: "logo"))
-        imageView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        imageView.frame = CGRect(x: 0, y: 0, width: 35, height: 35)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
-    
-    
+
     // CollectionView methods ----------------------------------------------------------------------------
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -76,7 +71,6 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ConversationCell
         let conversation = allConversations[indexPath.item]
-        
         usersReference.document(conversation.userid).getDocument { (document, error) in
             if error != nil {
                 print(error?.localizedDescription as Any)
@@ -97,12 +91,11 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
         cell.textLabel.addTarget(self, action: #selector(conversationClickedButton(_:)), for: .touchUpInside)
         cell.textLabel.tag = indexPath.item
-        cell.buzz.text = "buzz " + String(conversation.buzz)
+        cell.buzz.text = "Comments: " + String(conversation.buzz)
         cell.textLabel.setTitle(conversation.text, for: .normal)
         cell.dateLabel.text = conversation.date
         return cell
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let approximateWidthOfBioTextView = view.frame.width - 180;
@@ -117,7 +110,6 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 3
     }
-    
     
     func setupCollectionView(){
         // create collections view for conversations
@@ -154,7 +146,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     private func fetchConversations() {
-        let query = Firestore.firestore().collection("conversations").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+        let query = Firestore.firestore().collection("conversations").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any).order(by: "date", descending: true)
         query.getDocuments { (snapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -171,8 +163,6 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         }
     }
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         usersReference = Firestore.firestore().collection("users")
@@ -185,10 +175,10 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         header.addSubview(composeButton)
         header.addSubview(homeButton)
         
-        header.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 20, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 60)
-        titleImageView.anchor(header.topAnchor, left: header.leftAnchor, bottom: header.bottomAnchor, right: header.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        homeButton.anchor(header.topAnchor, left: header.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 70, heightConstant: 60)
-        composeButton.anchor(header.topAnchor, left: header.rightAnchor, bottom: header.bottomAnchor, right: header.rightAnchor, topConstant: 0, leftConstant: -50, bottomConstant: 0, rightConstant: 10, widthConstant: 0, heightConstant: 0)
+        header.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 80)
+        titleImageView.anchor(header.topAnchor, left: header.leftAnchor, bottom: header.bottomAnchor, right: header.rightAnchor, topConstant: 20, leftConstant: 0, bottomConstant: 5, rightConstant: 0, widthConstant: 0, heightConstant: 50)
+        homeButton.anchor(header.topAnchor, left: header.leftAnchor, bottom: nil, right: nil, topConstant: 20, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 70, heightConstant: 60)
+        composeButton.anchor(header.topAnchor, left: header.rightAnchor, bottom: header.bottomAnchor, right: header.rightAnchor, topConstant: 20, leftConstant: -50, bottomConstant: 0, rightConstant: 10, widthConstant: 0, heightConstant: 60)
         collectionView.anchor(header.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 1, rightConstant: 0, widthConstant: 0, heightConstant: 0)
     }
     
