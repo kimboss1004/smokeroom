@@ -8,22 +8,21 @@
 
 import UIKit
 import Firebase
+import InstantSearch
 
 class RegisterViewController: UIViewController {
     
     let db = Firestore.firestore()
     var ref: DocumentReference? = nil
-    
+    var index: Index!
     var firstname: String!
     var lastname: String!
     var username: String!
     var ghostname: String!
     var email: String!
     var password: String!
-    
     var loginEmail: String!
     var loginPassword: String!
-    
     
     lazy var introView: IntroView = {
         let view = IntroView()
@@ -65,13 +64,6 @@ class RegisterViewController: UIViewController {
         view.tag = 4
         return view
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(introView)
-        introView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-    
-    }
     
     @objc func loginButtonAction(_ sender:UIButton!){
         print(loginEmail)
@@ -165,12 +157,13 @@ class RegisterViewController: UIViewController {
     @objc func emailPasswordContinueButtonAction(_ sender:UIButton!){
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if(error == nil){
-                let user = User(name: self.firstname, username: self.username, ghostname: self.ghostname, email: self.email)
+                let user = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email)
                 self.db.collection("users").document(Auth.auth().currentUser!.uid).setData(user.toAnyObject() as! [String : Any], completion: { (err) in
                     if let err = err {
                         print("Error adding document: \(err)")
                     }
                 })
+                self.index.addObject(["name": self.firstname + self.lastname, "username": self.username, "email": self.email], withID: (Auth.auth().currentUser?.uid)!)
                 Helper.shared.showOKAlert(title: "Welcome!", message: "You have succesfully registered.", viewController: self)
                 for subview in self.view.subviews as [UIView]{
                     subview.removeFromSuperview()
@@ -185,9 +178,11 @@ class RegisterViewController: UIViewController {
 
     }
     
-    
-
-
-
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        index = Client(appID: "NZJAE708OM", apiKey: "61672ad893ddeeb69532d2cd146c7913").index(withName: "users")
+        view.addSubview(introView)
+        introView.anchor(view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+    }
 
 }

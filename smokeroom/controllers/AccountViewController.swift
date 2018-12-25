@@ -77,6 +77,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         return allConversations.count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ConversationCell
         let conversation = allConversations[indexPath.item]
@@ -123,9 +124,37 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         var reusableView : UICollectionReusableView? = nil
         if (kind == UICollectionElementKindSectionHeader) {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header", for: indexPath as IndexPath) as! AccountHeader
+            // if this is the current users account
             if accountid == Auth.auth().currentUser?.uid {
                 header.friendRequestButton.isHidden = true
             }
+            else {
+                // query to see if already friends or friend requested
+                let query = db.collection("friendrequests").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid).whereField("friendid", isEqualTo: accountid)
+                query.getDocuments(completion: { (snapshots, error) in
+                    if !(snapshots?.isEmpty)! {
+                        // if snapshot exists, friend request already exist
+                        for document in snapshots!.documents {
+                            // if confirmation is true, hide button
+                            if document.data()["confirmed"] as! Bool == true {
+                                header.friendRequestButton.setTitle("Already Friends", for: .normal)
+                                // header.friendRequestButton.isHidden = true
+                            }
+                            else {
+                                // else request not confirmed
+                                header.friendRequestButton.setTitle("Request Pending", for: .normal)
+                            }
+                            header.friendRequestButton.removeTarget(nil, action: nil, for: .allEvents)
+                            //self.collectionView.reloadData()
+                        }
+                    }
+                    else {
+                        // not friend requested yet
+                        header.friendRequestButton.addTarget(self, action: #selector(self.friendrequestButtonAction(_:)), for: .touchUpInside)
+                    }
+                })
+            }
+            // add account info on user
             usersReference.document(accountid).getDocument { (document, error) in
                 if error != nil {
                     print(error?.localizedDescription as Any)
@@ -199,6 +228,20 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     override func viewDidAppear(_ animated: Bool) {
         fetchConversations()
+    }
+    
+    @objc func friendrequestButtonAction(_ sender: UIButton! ) {
+        let friendRequest = FriendRequest(userid: (Auth.auth().currentUser?.uid)!, friendid: accountid, confirmed: false)
+        db.collection("friendrequests").addDocument(data: friendRequest.toAnyObject() as! [String : Any]
+        ) { err in
+            if let err = err {
+                print("Error adding document: \(err)")
+            }
+            else {
+                Helper.shared.showOKAlert(title: "Success", message: "Your Request has been sent", viewController: self)
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     override func viewDidLoad() {

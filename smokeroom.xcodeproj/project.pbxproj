@@ -22,6 +22,8 @@
 		FB10990620E80A8900BDD2DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */; };
 		FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990720E80FD400BDD2DD /* RegisterViewController.swift */; };
 		FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990920E8118300BDD2DD /* RegisterViews.swift */; };
+		FB294E6021D1C467009CE9D1 /* FriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB294E5F21D1C467009CE9D1 /* FriendRequest.swift */; };
+		FB294E6221D1DD9D009CE9D1 /* FriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB294E6121D1DD9D009CE9D1 /* FriendRequestCell.swift */; };
 		FB8CDC3520E0101D008EDBF4 /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */; };
 		FB8CDC3920E036BF008EDBF4 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */; };
 		FB8CDC3B20E03808008EDBF4 /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */; };
@@ -33,6 +35,7 @@
 		FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9E3DF42183F88900F05E5A /* Comment.swift */; };
 		FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC8C61620D0340600E5BD19 /* CreateViewController.swift */; };
 		FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */; };
+		FBE5A5F821CCD189001D0304 /* FriendsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */; };
 		FBF9D4EB20C47722009A189E /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EA20C47722009A189E /* Conversation.swift */; };
 		FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EF20C484AE009A189E /* AccountViewController.swift */; };
 /* End PBXBuildFile section */
@@ -80,6 +83,8 @@
 		FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FB10990720E80FD400BDD2DD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		FB10990920E8118300BDD2DD /* RegisterViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViews.swift; sourceTree = "<group>"; };
+		FB294E5F21D1C467009CE9D1 /* FriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequest.swift; sourceTree = "<group>"; };
+		FB294E6121D1DD9D009CE9D1 /* FriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestCell.swift; sourceTree = "<group>"; };
 		FB8CDC3420E0101D008EDBF4 /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
 		FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationCell.swift; sourceTree = "<group>"; };
@@ -91,6 +96,7 @@
 		FB9E3DF42183F88900F05E5A /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		FBC8C61620D0340600E5BD19 /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
 		FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableCell.swift; sourceTree = "<group>"; };
 		FBF9D4EA20C47722009A189E /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		FBF9D4EF20C484AE009A189E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -220,6 +226,7 @@
 				FBF9D4EA20C47722009A189E /* Conversation.swift */,
 				FB9AD0FF20DB298D002C0C0B /* User.swift */,
 				FB9E3DF42183F88900F05E5A /* Comment.swift */,
+				FB294E5F21D1C467009CE9D1 /* FriendRequest.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -228,6 +235,8 @@
 			isa = PBXGroup;
 			children = (
 				FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */,
+				FB294E6121D1DD9D009CE9D1 /* FriendRequestCell.swift */,
+				FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */,
 				FB8CDC3A20E03808008EDBF4 /* ConversationCell.swift */,
 				FB8CDC3820E036BF008EDBF4 /* HeaderCell.swift */,
 				FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */,
@@ -393,7 +402,9 @@
 				"${BUILT_PRODUCTS_DIR}/BoringSSL/openssl.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/InstantSearch/InstantSearch.framework",
 				"${BUILT_PRODUCTS_DIR}/InstantSearchClient/InstantSearchClient.framework",
+				"${BUILT_PRODUCTS_DIR}/InstantSearchCore/InstantSearchCore.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC/GRPCClient.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
@@ -407,7 +418,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/openssl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearch.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearchClient.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InstantSearchCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GRPCClient.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
@@ -433,6 +446,7 @@
 				FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */,
 				FB8CDC3D20E03956008EDBF4 /* CommentsCell.swift in Sources */,
 				FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */,
+				FB294E6221D1DD9D009CE9D1 /* FriendRequestCell.swift in Sources */,
 				FB05A7352188184F00DD6EB2 /* HomeViewController.swift in Sources */,
 				FB1007CB21C9B77100ABE789 /* AccountHeader.swift in Sources */,
 				FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */,
@@ -440,9 +454,11 @@
 				FB9AD0FC20DB17FB002C0C0B /* SettingViewController.swift in Sources */,
 				FB9AD0FE20DB28C0002C0C0B /* FriendsViewController.swift in Sources */,
 				FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */,
+				FBE5A5F821CCD189001D0304 /* FriendsTableCell.swift in Sources */,
 				FB05A7332188181200DD6EB2 /* RoomsViewController.swift in Sources */,
 				FB1007D121CAAAB400ABE789 /* SearchViewController.swift in Sources */,
 				FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */,
+				FB294E6021D1C467009CE9D1 /* FriendRequest.swift in Sources */,
 				FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */,
 				FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */,
 				FB9AD10220DB2F9D002C0C0B /* FriendsCell.swift in Sources */,

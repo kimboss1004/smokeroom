@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
-import InstantSearchClient
+import InstantSearch
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,10 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         let db = Firestore.firestore()
         let settings = db.settings
-        let client = Client(appID: "NZJAE708OM", apiKey: "YourAPIKey")
-        let index = client.index(withName: "your_index_name")
-        
+        InstantSearch.shared.configure(appID: "NZJAE708OM", apiKey: "61672ad893ddeeb69532d2cd146c7913", index: "users")
+        InstantSearch.shared.params.attributesToRetrieve = ["name", "username", "email"]
         settings.areTimestampsInSnapshotsEnabled = true
+//        InstantSearch.shared.configure(appID: "latency", apiKey: "1f6fd3a6fb973cb08419fe7d288fa4db", index: "bestbuy_promo")
+//        InstantSearch.shared.params.attributesToRetrieve = ["name", "salePrice"]
+//        InstantSearch.shared.params.attributesToHighlight = ["name"]
         db.settings = settings
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.rootViewController = HomeViewController()

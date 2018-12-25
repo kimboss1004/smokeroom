@@ -8,86 +8,67 @@
 
 import UIKit
 import Firebase
+import InstantSearch
 
-class SearchViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    var collectionView: UICollectionView!
-    var friendIDS: [String]! = [String]()
-    var friends: [User]! = [User]()
+class SearchViewController: HitsTableViewController {
     
-    // CollectionView methods ----------------------------------------------------------------------------
+    // for search->Account button functionality
+    var userids: [String] = [String]()
+    var accountVC: AccountViewController!
+    // Create search widgets
+    let searchBar = SearchBarWidget(frame: .zero)
+    let tableView = HitsTableWidget(frame: .zero)
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return friendIDS.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! FriendsCell
-        Firestore.firestore().collection("users").document(friendIDS[indexPath.item]).getDocument { (document, error) in
-            if error != nil {
-                print(error?.localizedDescription as Any)
-            }
-            else{
-                if let data = document?.data() {
-                    let friend = User(name: (data["name"] as? String)!, username: (data["username"] as? String)!, ghostname: (data["ghostname"] as? String)!, email: (data["email"] as? String)!)
-                    self.friends.append(friend)
-                    cell.nameButton.setTitle(friend.name, for: .normal)
-                    cell.usernameButton.setTitle(friend.username, for: .normal)
-                }
-            }
-        }
-        cell.usernameButton.addTarget(self, action: #selector(friendClickedButtonAction(_:)), for: .touchUpInside)
-        cell.nameButton.addTarget(self, action: #selector(friendClickedButtonAction(_:)), for: .touchUpInside)
-        cell.usernameButton.tag = indexPath.item
-        cell.nameButton.tag = indexPath.item
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 2
-    }
-    
-    func setupCollectionView(){
-        // create collections view for conversations
-        let layout = UICollectionViewFlowLayout()
-        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(FriendsCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.backgroundColor = UIColor(red: 220.0/255.0, green: 229.0/255.0, blue: 244.0/255.0, alpha: 1.0)
-    }
-    
-    private func fetchUsers() {
-        let query = Firestore.firestore().collection("users").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any).order(by: "date", descending: true)
-        query.getDocuments { (snapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                self.friendIDS = []
-                for document in snapshot!.documents {
-                    let data = document.data()
-                    self.friendIDS.append(data["friend_id"] as! String)
-                }
-                self.collectionView.reloadData()
-            }
-        }
-    }
-    
+    let dismissButton: UIButton = {
+        let button = UIButton()
+        button.setImage(#imageLiteral(resourceName: "left"), for: .normal)
+        button.backgroundColor = UIColor(red: 214/255, green: 214/255, blue: 214/255, alpha: 1.0)
+        button.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+
     @objc func dismissButtonAction(_ sender:UIButton!){
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func friendClickedButtonAction(_ sender:UIButton!){
-        dismiss(animated: true, completion: nil)
+    func initUI() {
+        // Add the declared views to the main view
+        self.view.addSubview(searchBar)
+        self.view.addSubview(tableView)
+        self.view.addSubview(dismissButton)
+        
+        dismissButton.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 80)
+        searchBar.anchor(view.topAnchor, left: dismissButton.rightAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 80)
+        tableView.anchor(searchBar.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
+        // Register tableView identifier
+        tableView.register(FriendsTableCell.self, forCellReuseIdentifier: "hitCell")
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, containing hit: [String : Any]) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "hitCell", for: indexPath) as! FriendsTableCell
+        // Adding touch link: from every search result -> User Account
+        cell.nameButton.setTitle(hit["name"] as? String, for: .normal)
+        cell.usernameButton.setTitle(hit["username"] as? String, for: .normal)
+        cell.nameButton.addTarget(self, action: #selector(userClickedButton(_:)), for: .touchUpInside)
+        cell.usernameButton.addTarget(self, action: #selector(userClickedButton(_:)), for: .touchUpInside)
+        cell.nameButton.tag = indexPath.item
+        cell.usernameButton.tag = indexPath.item
+        // add userid to our array(userids) in which we will use later in combination with tag for button functionality
+        userids.append((hit["objectID"] as? String)!)
+        return cell
     }
 
+    @objc func userClickedButton(_ sender:UIButton!){
+        accountVC = AccountViewController()
+        accountVC.accountid = userids[sender.tag]
+        self.present(accountVC, animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupCollectionView()
-
+        hitsTableView = tableView
+        initUI()
+        // Add all widgets to InstantSearch
+        InstantSearch.shared.registerAllWidgets(in: self.view)
     }
 }

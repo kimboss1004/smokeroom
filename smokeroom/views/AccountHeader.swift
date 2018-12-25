@@ -12,7 +12,7 @@ class AccountHeader: UICollectionViewCell {
     
     let namelabel: UILabel = {
         let label = UILabel()
-        label.text = "Austin Kim"
+        label.text = "Jungle Animal"
         label.textAlignment = .center
         label.font = UIFont(name:"HelveticaNeue-Bold", size: 20.0)
         return label

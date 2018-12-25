@@ -8,10 +8,12 @@
 
 import UIKit
 import Firebase
+import InstantSearch
 
 class SettingViewController: UIViewController {
     
     var user: User! = nil
+    var index: Index!
     
     let nav_view: UIView = {
         let nav_view = UIView()
@@ -196,6 +198,7 @@ class SettingViewController: UIViewController {
                                     }
                                     else {
                                         self.user.email = self.emailTextField.text!
+                                        self.index.partialUpdateObject(["email" : self.emailTextField.text! ], withID: (Auth.auth().currentUser?.uid)!)
                                     }
                                 }
                             }
@@ -220,6 +223,7 @@ class SettingViewController: UIViewController {
                             }
                             else {
                                 self.user.username = self.usernameTextField.text!
+                                self.index.partialUpdateObject(["username" : self.usernameTextField.text! ], withID: (Auth.auth().currentUser?.uid)!)
                             }
                         }
                     }
@@ -266,6 +270,7 @@ class SettingViewController: UIViewController {
                     }
                     else {
                         self.user.name = self.nameTextField.text!
+                        self.index.partialUpdateObject(["name" : self.nameTextField.text! ], withID: (Auth.auth().currentUser?.uid)!)
                     }
                     
                 }
@@ -276,6 +281,7 @@ class SettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        index = Client(appID: "NZJAE708OM", apiKey: "61672ad893ddeeb69532d2cd146c7913").index(withName: "users")
         Firestore.firestore().collection("users").document((Auth.auth().currentUser?.uid)!).getDocument { (document, error) in
             if error != nil {
                 print(error?.localizedDescription as Any)
@@ -311,7 +317,6 @@ class SettingViewController: UIViewController {
         view.addSubview(line3)
         view.addSubview(line4)
         view.addSubview(line5)
-        
         nav_view.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 80)
         profile.anchor(nav_view.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 35, leftConstant: (view.frame.width/2 - 50), bottomConstant: 0, rightConstant: (view.frame.width/2 - 50), widthConstant: 100, heightConstant: 100)
         emailLabel.anchor(profile.bottomAnchor, left: view.leftAnchor, bottom: nil, right: nil, topConstant: 50, leftConstant: 20, bottomConstant: 0, rightConstant: 0, widthConstant: 70, heightConstant: 50)
