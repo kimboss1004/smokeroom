@@ -14,7 +14,7 @@ class RegisterViewController: UIViewController {
     
     let db = Firestore.firestore()
     var ref: DocumentReference? = nil
-    var index: Index!
+    var index: Index! //for algolia search
     var firstname: String!
     var lastname: String!
     var username: String!
@@ -80,7 +80,6 @@ class RegisterViewController: UIViewController {
             }
         }
     }
-    
     
     @objc func loginBackButtonAction(_ sender:UIButton!){
         if let v = view.viewWithTag(5) {
@@ -155,14 +154,15 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func emailPasswordContinueButtonAction(_ sender:UIButton!){
+        // create user in Firestore default Users
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if(error == nil){
+                // create user in our personal User databse
                 let user = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email)
-                self.db.collection("users").document(Auth.auth().currentUser!.uid).setData(user.toAnyObject() as! [String : Any], completion: { (err) in
-                    if let err = err {
-                        print("Error adding document: \(err)")
-                    }
-                })
+                self.db.collection("users").document(Auth.auth().currentUser!.uid).setData(user.toAnyObject() as! [String : Any])
+                // set the current User so we can access easy
+                Helper.currentUser = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email)
+                // index var is for algolia
                 self.index.addObject(["name": self.firstname + self.lastname, "username": self.username, "email": self.email], withID: (Auth.auth().currentUser?.uid)!)
                 Helper.shared.showOKAlert(title: "Welcome!", message: "You have succesfully registered.", viewController: self)
                 for subview in self.view.subviews as [UIView]{

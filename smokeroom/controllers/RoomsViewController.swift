@@ -13,9 +13,10 @@ import Firebase
 class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     var collectionView: UICollectionView!
-    
+    var db = Firestore.firestore()
     var allConversations: [Conversation]! = [Conversation]()
-    var conversationIDS: [String]! = [String]()
+    var conversation_ids: [String]! = [String]()
+    var newsfeed: [String: Conversation] = [String: Conversation]()
     
     lazy var createVC: CreateViewController = {
         let view = CreateViewController()
@@ -93,7 +94,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         cell.textLabel.tag = indexPath.item
         cell.buzz.text = "Comments: " + String(conversation.buzz)
         cell.textLabel.setTitle(conversation.text, for: .normal)
-        cell.dateLabel.text = conversation.date
+        cell.dateLabel.text = Helper.shared.formatStringToUserTime(stringDate: conversation.date)
         return cell
     }
     
@@ -126,48 +127,153 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     
     // ---------------------------------------------------------------------------------------
     
-    @objc func createButtonAction(_ sender:UIButton!)
-    {
+    @objc func createButtonAction(_ sender:UIButton!) {
         self.present(createVC, animated: true, completion: nil)
     }
     
-    @objc func conversationClickedButton(_ sender:UIButton!)
-    {
+    @objc func conversationClickedButton(_ sender:UIButton!) {
         conversationVC.view = nil
+        print(sender.tag)
         conversationVC.conversation = allConversations[sender.tag]
-        conversationVC.conversationid = conversationIDS[sender.tag]
-        self.present(conversationVC, animated: true, completion: nil)
+        conversationVC.conversationid = conversation_ids[sender.tag]
+        self.present(conversationVC, animated: false, completion: nil)
     }
     
-    @objc func homeClickedButton(_ sender:UIButton!)
-    {
+    @objc func homeClickedButton(_ sender:UIButton!) {
         self.dismiss(animated: true, completion: nil)
-        
     }
     
-    private func fetchConversations() {
-        let query = Firestore.firestore().collection("conversations").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any).order(by: "date", descending: true)
+    private func fetchNewsfeed() {
+        // reset newsfeed to nil
+        self.newsfeed = [String: Conversation]()
+        // method below adds my posts to collections, and at the end it calls a chain of fetch methods
+        fetchMyConversations(userid: (Auth.auth().currentUser?.uid)!)
+    }
+    
+    private func fetchMyConversations(userid: String) {
+        let query = Firestore.firestore().collection("conversations").whereField("userid", isEqualTo: userid as Any).order(by: "date", descending: true)
         query.getDocuments { (snapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
             } else {
-                self.allConversations = []
-                self.conversationIDS = []
                 for document in snapshot!.documents {
                     let data = document.data()
-                    self.conversationIDS.append(document.documentID)
-                    self.allConversations.append(Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String))
+                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String)
                 }
-                self.collectionView.reloadData()
+                self.startFetches()
             }
         }
     }
+    
+    private func startFetches(){
+        // firestore find friends
+        let friends_query = self.db.collection("friendrequests").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+        var friendIDS: [String] = []
+        friends_query.getDocuments { (snapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in snapshot!.documents {
+                    let data = document.data()
+                    // if friendrequest confirmed, then friends == true
+                    if data["confirmed"] as! Bool == true {
+                        friendIDS.append(data["friendid"] as! String)
+                    }
+                }
+                // now look for next type of friendrequests
+                let friends_query_2 = self.db.collection("friendrequests").whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+                friends_query_2.getDocuments { (snapshot, err) in
+                    if let err = err {
+                        print("Error getting documents: \(err)")
+                    } else {
+                        for document in snapshot!.documents {
+                            let data = document.data()
+                            // if friendrequest confirmed, then friends == true
+                            if data["confirmed"] as! Bool == true {
+                                friendIDS.append(data["userid"] as! String)
+                            }
+                        }
+                        // ------------------------ at this point, friendIDS[] has all of user's friends ---------------------------------------------
+                        for id in friendIDS {
+                            //get posts made by user's friends. Inside the following method, at the end, is another fetch method for related_posts
+                            self.fetchFriendsConversations(userid: id)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func fetchFriendsConversations(userid: String) {
+        let query = self.db.collection("conversations").whereField("userid", isEqualTo: userid).order(by: "date", descending: true)
+        query.getDocuments { (snapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in snapshot!.documents {
+                    let data = document.data()
+                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String)
+                }
+                // now get posts that freinds commented on.
+                self.fetchRelatedConversations(userid: userid)
+            }
+        }
+    }
+    
+    private func fetchRelatedConversations(userid: String) {
+        self.db.collection("comments").whereField("userid", isEqualTo: userid).order(by: "date", descending: true).getDocuments { (snapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                // loop through all comments and get conversation ids they belong to
+                var commented_conversation_ids = [String]()
+                for document in snapshot!.documents {
+                    let data = document.data()
+                    commented_conversation_ids.append(data["conversationid"] as! String)
+                }
+                // make array unique (get rid of duplicate ids)
+                commented_conversation_ids = Array(Set(commented_conversation_ids))
+                // add to all conversations in array to newsfeed. For efficiency, on the last index of loop, call sort method on newsfeed
+                for (index, conversation_id) in commented_conversation_ids.enumerated() {
+                    self.db.collection("conversations").document(conversation_id).getDocument{ (document2, error) in
+                        if error != nil {
+                            print(error?.localizedDescription as Any)
+                        }
+                        else{
+                            if let data2 = document2?.data() {
+                                self.newsfeed[(document2?.documentID)!] = Conversation(text: data2["text"] as! String, userid: data2["userid"] as! String, buzz: data2["buzz"] as! Int, ghostname: data2["ghostname"] as! Bool, date: data2["date"] as! String)
+                            }
+                            // on last index of loop, sort the updated newsfeed
+                            if index == (commented_conversation_ids.count - 1) {
+                                self.sortNewsfeed()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private func sortNewsfeed() {
+        // reset conversations storage to prevent duplication
+        self.allConversations = []
+        self.conversation_ids = []
+        // sort newsfeed by most recent date. we must parse out the date in order to use sort properly on our Dictionary
+        for (conv_id,conv) in (Array(self.newsfeed).sorted(by: { Helper.shared.DateComparisonFormat(stringDate: $0.value.date) > Helper.shared.DateComparisonFormat(stringDate: $1.value.date)})) {
+            // add each date-sorted conversation to new array that we will use in collections
+            self.allConversations.append(conv)
+            self.conversation_ids.append(conv_id)
+        }
+        // refresh the collection view
+        self.collectionView.reloadData()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         usersReference = Firestore.firestore().collection("users")
         setupCollectionView()
-        fetchConversations()
+        fetchNewsfeed()
         view.backgroundColor = .white
         view.addSubview(header)
         view.addSubview(collectionView)
@@ -183,7 +289,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        fetchConversations()
+        fetchNewsfeed()
     }
     
     

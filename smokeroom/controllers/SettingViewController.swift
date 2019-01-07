@@ -24,6 +24,12 @@ class SettingViewController: UIViewController {
             button.addTarget(self, action: #selector(dismissButtonAction(_:)), for: .touchUpInside)
             return button
         }()
+        let logoutButton: UIButton = {
+            let button = UIButton()
+            button.setTitle("Logout", for: .normal)
+            button.addTarget(self, action: #selector(logoutButtonAction(_:)), for: .touchUpInside)
+            return button
+        }()
         let settingsLabel: UILabel = {
             let label = UILabel()
             label.font = UIFont(name: "Apple SD Gothic Neo", size: 25)
@@ -34,7 +40,9 @@ class SettingViewController: UIViewController {
         }()
         nav_view.addSubview(dismissButton)
         nav_view.addSubview(settingsLabel)
+        nav_view.addSubview(logoutButton)
         dismissButton.anchor(nav_view.topAnchor, left: nav_view.leftAnchor, bottom: nil, right: nil, topConstant: 20, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 60)
+        logoutButton.anchor(nav_view.topAnchor, left: nil, bottom: nav_view.bottomAnchor, right: nav_view.rightAnchor, topConstant: 20, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 80, heightConstant: 60)
         settingsLabel.anchor(dismissButton.topAnchor, left: nav_view.leftAnchor, bottom: nil, right: nav_view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 60)
         return nav_view
     }()
@@ -177,6 +185,20 @@ class SettingViewController: UIViewController {
     
     @objc func dismissButtonAction(_ sender:UIButton!){
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func logoutButtonAction(_ sender:UIButton!){
+        do
+        {
+            try Auth.auth().signOut()
+        }
+        catch let error as NSError
+        {
+            print (error.localizedDescription)
+        }
+        self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+        self.view.window!.rootViewController = RegisterViewController()
+        Helper.shared.showOKAlert(title: "Logged Out", message: "you have been logged out", viewController: self.view.window!.rootViewController!)
     }
     
     @objc func saveButtonAction(_ sender:UIButton!){

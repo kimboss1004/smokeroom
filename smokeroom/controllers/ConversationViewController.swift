@@ -91,16 +91,22 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         }
         else{
             let comment = Comment(text: commentTextField.text!, userid: (Auth.auth().currentUser?.uid)!, ghostname: false, conversationid: conversationid)
-            ref = db.collection("comments").addDocument(data: comment.toAnyObject() as! [String : Any]
-            ) { err in
-                if let err = err {
-                    print("Error adding document: \(err)")
-                }
-            }
+            ref = db.collection("comments").addDocument(data: comment.toAnyObject() as! [String : Any])
             conversation.buzz += 1
-            db.collection("conversations").document(conversationid).updateData(["buzz": conversation.buzz]) { (error) in
-                if error != nil {
-                    print(error?.localizedDescription as Any)
+            db.collection("conversations").document(conversationid).updateData(["buzz": conversation.buzz])
+            // notify tagged users
+            let tags = Helper.shared.extract_tags(text: comment.text)
+            if tags != [] {
+                for t in tags {
+                    // check if tagged_username is a real user
+                    self.db.collection("users").whereField("username", isEqualTo: t).getDocuments(completion: { (snapshots, error) in
+                        if !(snapshots?.isEmpty)! { // if exist than create tag and notification in db
+                            for document in snapshots!.documents { // document = user data
+                                let notification = Notification(userid: document.documentID, type: "Comment", type_id: (self.ref?.documentID)!, message: Helper.currentUser.name + " tagged you in a comment")
+                                self.db.collection("notifications").addDocument(data: notification.toAnyObject() as! [String: Any])
+                            }
+                        }
+                    })
                 }
             }
             commentTextField.text = ""
@@ -124,6 +130,21 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
             }
             conversation.buzz += 1
             db.collection("conversations").document(conversationid).updateData(["buzz" : self.conversation.buzz])
+            // notify tagged users
+            let tags = Helper.shared.extract_tags(text: comment.text)
+            if tags != [] {
+                for t in tags {
+                    // check if tagged_username is a real user
+                    self.db.collection("users").whereField("username", isEqualTo: t).getDocuments(completion: { (snapshots, error) in
+                        if !(snapshots?.isEmpty)! { // if exist than create tag and notification in db
+                            for document in snapshots!.documents { // document = user data
+                                let notification = Notification(userid: document.documentID, type: "Comment", type_id: (self.ref?.documentID)!, message: Helper.currentUser.ghostname + " tagged you in a comment")
+                                self.db.collection("notifications").addDocument(data: notification.toAnyObject() as! [String: Any])
+                            }
+                        }
+                    })
+                }
+            }
             commentTextField.text = ""
             fetchComments(scroll: true)
             commentTextField.endEditing(true)
@@ -191,7 +212,7 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         }
         cell.textLabel.tag = indexPath.item
         cell.textLabel.text = comment.text
-        cell.dateLabel.text = comment.date
+        cell.dateLabel.text = Helper.shared.formatStringToUserTime(stringDate: comment.date)
         return cell
     }
     
@@ -213,7 +234,7 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
         if (kind == UICollectionElementKindSectionHeader) {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "header", for: indexPath as IndexPath) as! HeaderCell
             header.textLabel.text = conversation.text
-            header.dateLabel.text = conversation.date
+            header.dateLabel.text = Helper.shared.formatStringToUserTime(stringDate: conversation.date)
             header.buzz.text = String(allComments.count) + " buzz"
             usersReference.document(conversation.userid).getDocument { (document, error) in
                 if error != nil {
@@ -267,7 +288,7 @@ class ConversationViewController: UIViewController, UICollectionViewDelegateFlow
                 self.allComments = []
                 for document in snapshot!.documents {
                     let data = document.data()
-                    self.allComments.append(Comment(text: data["text"] as! String, userid: data["userid"] as! String, ghostname: data["ghostname"] as! Bool, conversationid: data["conversationid"] as! String, date: Helper.shared.formatStringToUserTime(stringDate: data["date"] as! String)))
+                    self.allComments.append(Comment(text: data["text"] as! String, userid: data["userid"] as! String, ghostname: data["ghostname"] as! Bool, conversationid: data["conversationid"] as! String, date: data["date"] as! String))
                 }
                 self.collectionView.reloadData()
                 if scroll {

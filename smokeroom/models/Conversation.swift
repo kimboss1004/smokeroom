@@ -33,8 +33,9 @@ class Conversation {
         self.ghostname = ghostname
         self.buzz = buzz
         self.views = 0
-        self.date = Helper.shared.formatStringToUserTime(stringDate: date)
+        self.date = date
     }
+    
     
     init(snapshot : DataSnapshot){
         let snapValue = snapshot.value as? NSDictionary

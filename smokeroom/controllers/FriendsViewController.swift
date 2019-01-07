@@ -15,7 +15,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     var collectionView: UICollectionView!
     var friendIDS: [String]! = [String]()
     var potentialFriendIDS: [String]! = [String]()
-    var friendRequestIDS: [String]! = [String]()
+    var friendRequestIDS: [String]! = [String]() // matching pair of potentialFriendIDS
     var userid: String!
     let db = Firestore.firestore()
     
@@ -68,7 +68,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // section 1 is for friendsCells
-        if indexPath.section == 1 {
+        if indexPath.section == 1 { // this section is for your confirmed friends
             let friendCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! FriendsCell
             Firestore.firestore().collection("users").document(friendIDS[indexPath.item]).getDocument { (document, error) in
                 if error != nil {
@@ -88,7 +88,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
             return friendCell
         }
         else {
-            // other section is for friend requests
+            // other section is for friend requests that are pending
             let friendRequestCell = collectionView.dequeueReusableCell(withReuseIdentifier: "FriendRequestCell", for: indexPath) as! FriendRequestCell
             Firestore.firestore().collection("users").document(potentialFriendIDS[indexPath.item]).getDocument { (document, error) in
                 if error != nil {
@@ -146,26 +146,26 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
                         self.friendIDS.append(data["friendid"] as! String)
                     }
                 }
-                self.collectionView.reloadData()
-            }
-        }
-        let friend_requests_for_currentuser_query = db.collection("friendrequests").whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
-        friend_requests_for_currentuser_query.getDocuments { (snapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in snapshot!.documents {
-                    let data = document.data()
-                    self.friendRequestIDS.append(document.documentID)
-                    // if friendrequest confirmed, then friends == true
-                    if data["confirmed"] as! Bool == true {
-                        self.friendIDS.append(data["userid"] as! String)
-                    }
-                    else { // otherwise, it is still a pending friend request
-                        self.potentialFriendIDS.append(data["userid"] as! String)
+                // now look for next type of friend requests
+                let friend_requests_for_currentuser_query = self.db.collection("friendrequests").whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+                friend_requests_for_currentuser_query.getDocuments { (snapshot, err) in
+                    if let err = err {
+                        print("Error getting documents: \(err)")
+                    } else {
+                        for document in snapshot!.documents {
+                            let data = document.data()
+                            // if friendrequest confirmed, then friends == true
+                            if data["confirmed"] as! Bool == true {
+                                self.friendIDS.append(data["userid"] as! String)
+                            }
+                            else { // otherwise, it is still a pending friend request
+                                self.friendRequestIDS.append(document.documentID)
+                                self.potentialFriendIDS.append(data["userid"] as! String)
+                            }
+                        }
+                        self.collectionView.reloadData()
                     }
                 }
-                self.collectionView.reloadData()
             }
         }
     }
@@ -187,12 +187,16 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     }
 
     @objc func acceptFriendButtonAction(_ sender:UIButton!){
-        db.collection("friendRequests").document(friendRequestIDS[sender.tag]).updateData(["confirmed": true]) { (error) in
+        db.collection("friendrequests").document(friendRequestIDS[sender.tag]).updateData(["confirmed": true]) { (error) in
             if error != nil {
                 print(error?.localizedDescription as Any)
                 return
             }
             else {
+                let notification = Notification(userid: self.potentialFriendIDS[sender.tag], type: "FriendRequest", type_id: (Auth.auth().currentUser?.uid)!, message: Helper.currentUser.name + " accepted your friend request")
+                self.db.collection("notifications").addDocument(data: notification.toAnyObject() as! [String: Any])
+                self.fetchFriendsAndRequests()
+                Helper.shared.showOKAlert(title: "Friend Accepted", message: "Woohoo, new friend!", viewController: self)
                 //on success reload collectionview
             }
             
@@ -201,6 +205,10 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     @objc func addButtonAction(_ sender:UIButton!){
         self.present(SearchVC, animated: true, completion:  nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        collectionView.reloadData()
     }
     
     override func viewDidLoad() {

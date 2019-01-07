@@ -12,6 +12,7 @@ import Firebase
 
 class Helper {
     static var shared = Helper()
+    static var currentUser: User = User()
     
     func showOKAlert(title: String, message: String, viewController: UIViewController){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -57,5 +58,21 @@ class Helper {
         return dateFormatter.string(from: Date())
     }
     
+    func DateComparisonFormat(stringDate: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return dateFormatter.date(from: stringDate)!
+    }
+    
+    func extract_tags(text: String) -> [String] {
+        let string = text as NSString
+        if let regex = try? NSRegularExpression(pattern: "@[a-z0-9]+", options: .caseInsensitive) {
+            return regex.matches(in: string as String, options: [], range: NSRange(location: 0, length: string.length)).map {
+                string.substring(with: $0.range).replacingOccurrences(of: "@", with: "").lowercased()
+            }
+        }
+        return []
+    }
+
     
 }

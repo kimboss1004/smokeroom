@@ -17,6 +17,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
     var usersReference: CollectionReference!
     var allConversations: [Conversation]! = [Conversation]()
     var conversationIDS: [String]! = [String]()
+    var friend_request_id: String = ""
     
     lazy var friendsVC: FriendsViewController = {
         let view = FriendsViewController()
@@ -103,7 +104,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         cell.textLabel.tag = indexPath.item
         cell.buzz.text = "Comments: " + String(conversation.buzz)
         cell.textLabel.setTitle(conversation.text, for: .normal)
-        cell.dateLabel.text = conversation.date
+        cell.dateLabel.text = Helper.shared.formatStringToUserTime(stringDate: conversation.date)
         return cell
     }
     
@@ -130,8 +131,8 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
             }
             else {
                 // query to see if already friends or friend requested
-                let query = db.collection("friendrequests").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid).whereField("friendid", isEqualTo: accountid)
-                query.getDocuments(completion: { (snapshots, error) in
+                let current_user_made_request_query = db.collection("friendrequests").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any).whereField("friendid", isEqualTo: accountid)
+                current_user_made_request_query.getDocuments(completion: { (snapshots, error) in
                     if !(snapshots?.isEmpty)! {
                         // if snapshot exists, friend request already exist
                         for document in snapshots!.documents {
@@ -149,8 +150,32 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                         }
                     }
                     else {
-                        // not friend requested yet
-                        header.friendRequestButton.addTarget(self, action: #selector(self.friendrequestButtonAction(_:)), for: .touchUpInside)
+                        // check for friendreqest snapshot where currentuser was the reciever
+                        let current_user_got_request_query = self.db.collection("friendrequests").whereField("userid", isEqualTo: self.accountid).whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+                        current_user_got_request_query.getDocuments(completion: { (snapshots, error) in
+                            if !(snapshots?.isEmpty)! {
+                                // if snapshot exists, friend request exists
+                                for document in snapshots!.documents {
+                                    // if confirmation is true, hide button
+                                    if document.data()["confirmed"] as! Bool == true {
+                                        header.friendRequestButton.setTitle("Friends", for: .normal)
+                                        header.friendRequestButton.removeTarget(nil, action: nil, for: .allEvents)
+                                    }
+                                    else {
+                                        // else request not confirmed
+                                        header.friendRequestButton.setTitle("Accept Friend Request", for: .normal)
+                                        header.friendRequestButton.removeTarget(nil, action: nil, for: .allEvents)
+                                        self.friend_request_id = document.documentID
+                                        header.friendRequestButton.addTarget(self, action: #selector(self.acceptFriendButtonAction(_:)), for: .touchUpInside)
+                                    }
+                                    //self.collectionView.reloadData()
+                                }
+                            }
+                            else {
+                                // not friend requested yet
+                                header.friendRequestButton.addTarget(self, action: #selector(self.friendrequestButtonAction(_:)), for: .touchUpInside)
+                            }
+                        })
                     }
                 })
             }
@@ -238,9 +263,23 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                 print("Error adding document: \(err)")
             }
             else {
+                let notification = Notification(userid: self.accountid, type: "FriendRequest", type_id: (Auth.auth().currentUser?.uid)!, message: Helper.currentUser.name + " sent you a friend request")
+                self.db.collection("notifications").addDocument(data: notification.toAnyObject() as! [String: Any])
                 Helper.shared.showOKAlert(title: "Success", message: "Your Request has been sent", viewController: self)
                 self.collectionView.reloadData()
             }
+        }
+    }
+    
+    @objc func acceptFriendButtonAction(_ sender:UIButton!){
+        db.collection("friendrequests").document(friend_request_id).updateData(["confirmed": true]) { (error) in
+            if error == nil {
+                let notification = Notification(userid: self.accountid, type: "FriendRequest", type_id: (Auth.auth().currentUser?.uid)!, message: Helper.currentUser.name + " accepted your friend request")
+                self.db.collection("notifications").addDocument(data: notification.toAnyObject() as! [String: Any])
+                Helper.shared.showOKAlert(title: "Friend Accepted", message: "Woohoo, new friend!", viewController: self)
+                self.collectionView.reloadData()
+            }
+            
         }
     }
     

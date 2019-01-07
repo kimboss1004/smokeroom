@@ -33,6 +33,8 @@
 		FB9AD10020DB298D002C0C0B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD0FF20DB298D002C0C0B /* User.swift */; };
 		FB9AD10220DB2F9D002C0C0B /* FriendsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */; };
 		FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9E3DF42183F88900F05E5A /* Comment.swift */; };
+		FBAB8F2321DF0F0F00152C91 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAB8F2221DF0F0F00152C91 /* Tag.swift */; };
+		FBAB8F2721E1AD9B00152C91 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAB8F2621E1AD9B00152C91 /* Notification.swift */; };
 		FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC8C61620D0340600E5BD19 /* CreateViewController.swift */; };
 		FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */; };
 		FBE5A5F821CCD189001D0304 /* FriendsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */; };
@@ -94,6 +96,8 @@
 		FB9AD0FF20DB298D002C0C0B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FB9AD10120DB2F9D002C0C0B /* FriendsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCell.swift; sourceTree = "<group>"; };
 		FB9E3DF42183F88900F05E5A /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		FBAB8F2221DF0F0F00152C91 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		FBAB8F2621E1AD9B00152C91 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		FBC8C61620D0340600E5BD19 /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
 		FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableCell.swift; sourceTree = "<group>"; };
@@ -227,6 +231,8 @@
 				FB9AD0FF20DB298D002C0C0B /* User.swift */,
 				FB9E3DF42183F88900F05E5A /* Comment.swift */,
 				FB294E5F21D1C467009CE9D1 /* FriendRequest.swift */,
+				FBAB8F2221DF0F0F00152C91 /* Tag.swift */,
+				FBAB8F2621E1AD9B00152C91 /* Notification.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -465,6 +471,8 @@
 				FB8CDC3920E036BF008EDBF4 /* HeaderCell.swift in Sources */,
 				FB9AD10020DB298D002C0C0B /* User.swift in Sources */,
 				FB8CDC3B20E03808008EDBF4 /* ConversationCell.swift in Sources */,
+				FBAB8F2721E1AD9B00152C91 /* Notification.swift in Sources */,
+				FBAB8F2321DF0F0F00152C91 /* Tag.swift in Sources */,
 				FBF9D4EB20C47722009A189E /* Conversation.swift in Sources */,
 				FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */,
 			);

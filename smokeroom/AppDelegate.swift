@@ -30,6 +30,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.rootViewController = HomeViewController()
         window!.makeKeyAndVisible()
+        
+        //set current user to universal variable
+        if Auth.auth().currentUser != nil {
+            db.collection("users").document((Auth.auth().currentUser?.uid)!).getDocument { (document, error) in
+                if error != nil {
+                    print(error?.localizedDescription as Any)
+                }
+                else{
+                    if let data = document?.data() {
+                        Helper.currentUser = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String)
+                        
+                    }
+                }
+            }
+        }
         return true
     }
     

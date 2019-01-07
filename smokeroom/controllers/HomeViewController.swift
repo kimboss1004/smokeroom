@@ -90,6 +90,15 @@ class HomeViewController: UIViewController {
         return button
     }()
     
+    let notificationsButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Notifications", for: .normal)
+        button.titleLabel?.font = UIFont(name: "AppleSDGothicNeo-Bold", size: 30)!
+        button.backgroundColor = .red
+        button.addTarget(self, action: #selector(notificationsButtonAction(_:)), for: .touchUpInside)
+        return button
+    }()
+    
     
     
     
@@ -102,12 +111,14 @@ class HomeViewController: UIViewController {
         view.addSubview(settingsButton)
         view.addSubview(friendsButton)
         view.addSubview(accountButton)
+        view.addSubview(notificationsButton)
         titleImageView.anchor(view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 50, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         titleLabel.anchor(titleImageView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         roomsButton.anchor(titleLabel.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 10, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         settingsButton.anchor(roomsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         friendsButton.anchor(settingsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
         accountButton.anchor(friendsButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
+        notificationsButton.anchor(accountButton.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 100)
     }
     
     
@@ -125,6 +136,10 @@ class HomeViewController: UIViewController {
     
     @objc func accountButtonAction(_ sender: UIButton!){
         self.present(accountVC, animated: true, completion:  nil)
+    }
+    
+    @objc func notificationsButtonAction(_ sender: UIButton!){
+        self.present(notificationsVC, animated: true, completion:  nil)
     }
     
     /*
