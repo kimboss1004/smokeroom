@@ -11,11 +11,16 @@ import UIKit
 
 class FriendsCell: UICollectionViewCell {
     
-    let profile: UIButton = {
-        let button = UIButton()
-        button.setImage( #imageLiteral(resourceName: "profile_image"), for: .normal)
-        return button
+    let profile: UIImageView = {
+        let view = UIImageView()
+        view.image = #imageLiteral(resourceName: "profile_image")
+        view.layer.cornerRadius = 25
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        view.contentMode = .scaleAspectFill
+        return view
     }()
+    
     
     let usernameButton: UIButton = {
         let button = UIButton()
@@ -56,7 +61,7 @@ class FriendsCell: UICollectionViewCell {
         addSubview(nameButton)
         addSubview(usernameButton)
         addSubview((rightArrow))
-        profile.anchor(topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 80, heightConstant: 80)
+        profile.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 50, heightConstant: 50)
         usernameButton.anchor(topAnchor, left: profile.rightAnchor, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 10, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 50)
         nameButton.anchor(nil, left: usernameButton.leftAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 40)
         rightArrow.anchor(topAnchor, left: nil, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 0, heightConstant: 0)

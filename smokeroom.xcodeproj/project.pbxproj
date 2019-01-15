@@ -18,7 +18,6 @@
 		FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB09255420BF07DD0071C1E8 /* anchorExtension.swift */; };
 		FB1007CB21C9B77100ABE789 /* AccountHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1007CA21C9B77100ABE789 /* AccountHeader.swift */; };
 		FB1007D121CAAAB400ABE789 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB1007D021CAAAB400ABE789 /* SearchViewController.swift */; };
-		FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990320E6BB4200BDD2DD /* CommentViewController.swift */; };
 		FB10990620E80A8900BDD2DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */; };
 		FB10990820E80FD400BDD2DD /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990720E80FD400BDD2DD /* RegisterViewController.swift */; };
 		FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB10990920E8118300BDD2DD /* RegisterViews.swift */; };
@@ -35,11 +34,13 @@
 		FB9E3DF52183F88900F05E5A /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9E3DF42183F88900F05E5A /* Comment.swift */; };
 		FBAB8F2321DF0F0F00152C91 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAB8F2221DF0F0F00152C91 /* Tag.swift */; };
 		FBAB8F2721E1AD9B00152C91 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAB8F2621E1AD9B00152C91 /* Notification.swift */; };
+		FBAB8F2921E2E8A000152C91 /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBAB8F2821E2E8A000152C91 /* NotificationCell.swift */; };
 		FBC8C61720D0340600E5BD19 /* CreateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC8C61620D0340600E5BD19 /* CreateViewController.swift */; };
 		FBCD74FF20C74C5200C8EF19 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */; };
 		FBE5A5F821CCD189001D0304 /* FriendsTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */; };
 		FBF9D4EB20C47722009A189E /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EA20C47722009A189E /* Conversation.swift */; };
 		FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF9D4EF20C484AE009A189E /* AccountViewController.swift */; };
+		FBFCA74E21E705A400637DCF /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBFCA74D21E705A400637DCF /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +82,6 @@
 		FB09255420BF07DD0071C1E8 /* anchorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = anchorExtension.swift; sourceTree = "<group>"; };
 		FB1007CA21C9B77100ABE789 /* AccountHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountHeader.swift; sourceTree = "<group>"; };
 		FB1007D021CAAAB400ABE789 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
-		FB10990320E6BB4200BDD2DD /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		FB10990520E80A8800BDD2DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FB10990720E80FD400BDD2DD /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		FB10990920E8118300BDD2DD /* RegisterViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViews.swift; sourceTree = "<group>"; };
@@ -98,11 +98,13 @@
 		FB9E3DF42183F88900F05E5A /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		FBAB8F2221DF0F0F00152C91 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		FBAB8F2621E1AD9B00152C91 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		FBAB8F2821E2E8A000152C91 /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		FBC8C61620D0340600E5BD19 /* CreateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateViewController.swift; sourceTree = "<group>"; };
 		FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		FBE5A5F721CCD188001D0304 /* FriendsTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableCell.swift; sourceTree = "<group>"; };
 		FBF9D4EA20C47722009A189E /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		FBF9D4EF20C484AE009A189E /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		FBFCA74D21E705A400637DCF /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 				FB09252420BEF9930071C1E8 /* AppDelegate.swift */,
 				FB06C1CC2100168000420EBF /* Helper.swift */,
 				FB09255420BF07DD0071C1E8 /* anchorExtension.swift */,
+				FBFCA74C21E7056800637DCF /* helpers */,
 				FBF9D4EE20C47F3B009A189E /* views */,
 				FBF9D4ED20C47F2F009A189E /* models */,
 				FBF9D4EC20C47F08009A189E /* controllers */,
@@ -218,7 +221,6 @@
 				FB9AD0FD20DB28C0002C0C0B /* FriendsViewController.swift */,
 				FB1007D021CAAAB400ABE789 /* SearchViewController.swift */,
 				FB10990720E80FD400BDD2DD /* RegisterViewController.swift */,
-				FB10990320E6BB4200BDD2DD /* CommentViewController.swift */,
 				FBCD74FE20C74C5200C8EF19 /* NotificationsViewController.swift */,
 			);
 			path = controllers;
@@ -248,8 +250,17 @@
 				FB8CDC3C20E03956008EDBF4 /* CommentsCell.swift */,
 				FB10990920E8118300BDD2DD /* RegisterViews.swift */,
 				FB1007CA21C9B77100ABE789 /* AccountHeader.swift */,
+				FBAB8F2821E2E8A000152C91 /* NotificationCell.swift */,
 			);
 			path = views;
+			sourceTree = "<group>";
+		};
+		FBFCA74C21E7056800637DCF /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FBFCA74D21E705A400637DCF /* Extensions.swift */,
+			);
+			path = helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -454,8 +465,8 @@
 				FBF9D4F020C484AE009A189E /* AccountViewController.swift in Sources */,
 				FB294E6221D1DD9D009CE9D1 /* FriendRequestCell.swift in Sources */,
 				FB05A7352188184F00DD6EB2 /* HomeViewController.swift in Sources */,
+				FBFCA74E21E705A400637DCF /* Extensions.swift in Sources */,
 				FB1007CB21C9B77100ABE789 /* AccountHeader.swift in Sources */,
-				FB10990420E6BB4200BDD2DD /* CommentViewController.swift in Sources */,
 				FB06C1CD2100168000420EBF /* Helper.swift in Sources */,
 				FB9AD0FC20DB17FB002C0C0B /* SettingViewController.swift in Sources */,
 				FB9AD0FE20DB28C0002C0C0B /* FriendsViewController.swift in Sources */,
@@ -468,6 +479,7 @@
 				FB10990A20E8118300BDD2DD /* RegisterViews.swift in Sources */,
 				FB09255520BF07DD0071C1E8 /* anchorExtension.swift in Sources */,
 				FB9AD10220DB2F9D002C0C0B /* FriendsCell.swift in Sources */,
+				FBAB8F2921E2E8A000152C91 /* NotificationCell.swift in Sources */,
 				FB8CDC3920E036BF008EDBF4 /* HeaderCell.swift in Sources */,
 				FB9AD10020DB298D002C0C0B /* User.swift in Sources */,
 				FB8CDC3B20E03808008EDBF4 /* ConversationCell.swift in Sources */,

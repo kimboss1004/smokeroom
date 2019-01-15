@@ -8,12 +8,14 @@
 
 import UIKit
 import Firebase
+import FirebaseStorage
 import InstantSearch
 
-class SettingViewController: UIViewController {
+class SettingViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var user: User! = nil
     var index: Index!
+    let db = Firestore.firestore()
     
     let nav_view: UIView = {
         let nav_view = UIView()
@@ -47,13 +49,15 @@ class SettingViewController: UIViewController {
         return nav_view
     }()
 
-    let profile: UIButton = {
-        let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "profile_image"), for: .normal)
-        button.frame = CGRect(x: 160, y: 100, width: 100, height: 100)
-        button.layer.cornerRadius = 0.5 * button.bounds.size.width
-        button.clipsToBounds = true
-        return button
+    lazy var profile: UIImageView = {
+        let view = UIImageView()
+        view.image = #imageLiteral(resourceName: "profile_image")
+        view.frame = CGRect(x: 160, y: 100, width: 100, height: 100)
+        view.layer.cornerRadius = 0.5 * view.bounds.size.width
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(selectProfileViewAction)))
+        return view
     }()
 
     
@@ -183,6 +187,56 @@ class SettingViewController: UIViewController {
         return view
     }()
     
+    // UIImage Picker
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var selectedImageFromPicker: UIImage?
+        if let editedImage = info["UIImagePickerControllerEditedImage"]{
+            selectedImageFromPicker = editedImage as? UIImage
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] {
+            selectedImageFromPicker = originalImage as? UIImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            profile.image = selectedImage
+        }
+
+        let imageName = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("profile_images").child("\(imageName).jpeg")
+        let uploadData = profile.image!.resize_and_compress_into_data()
+        if uploadData != Data() {
+            // upload picture data into firestore
+            storageRef.putData(uploadData, metadata: nil) { (metadata, error) in
+                if error != nil {
+                    return
+                }
+                // if upload successful, then download the image url and save into user_profile_url
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                        return
+                    }
+                    self.db.collection("users").document((Auth.auth().currentUser?.uid)!).updateData(["profile_url": url!.absoluteString]) { (error) in
+                        if error != nil { return }
+                    }
+                })
+            }
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func selectProfileViewAction(){
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
+    
+    // ------ Actions -------------------------------
+    
     @objc func dismissButtonAction(_ sender:UIButton!){
         dismiss(animated: true, completion: nil)
     }
@@ -204,17 +258,16 @@ class SettingViewController: UIViewController {
     @objc func saveButtonAction(_ sender:UIButton!){
         var errors = ""
         if user != nil {
-            let db = Firestore.firestore()
             let uid = (Auth.auth().currentUser?.uid)!
             if user.email != self.emailTextField.text {
                 // check wether the Firebase Auth has email unused
                 Auth.auth().currentUser?.updateEmail(to: self.emailTextField.text!, completion: { (error) in
                     if (error == nil) {
                         // update our own personal user database
-                        let query = db.collection("users").whereField("email", isEqualTo: self.emailTextField.text!)
+                        let query = self.db.collection("users").whereField("email", isEqualTo: self.emailTextField.text!)
                         query.getDocuments(completion: { (snapshots, error) in
                             if (snapshots?.isEmpty)! {
-                                db.collection("users").document(uid).updateData(["email": self.emailTextField.text!.lowercased()]) { (error) in
+                                self.db.collection("users").document(uid).updateData(["email": self.emailTextField.text!.lowercased()]) { (error) in
                                     if error != nil {
                                         print(error?.localizedDescription as Any)
                                     }
@@ -238,7 +291,7 @@ class SettingViewController: UIViewController {
                 let query = db.collection("users").whereField("username", isEqualTo: self.usernameTextField.text!)
                 query.getDocuments(completion: { (snapshots, error) in
                     if (snapshots?.isEmpty)! {
-                        db.collection("users").document(uid).updateData(["username": self.usernameTextField.text!]) { (error) in
+                        self.db.collection("users").document(uid).updateData(["username": self.usernameTextField.text!]) { (error) in
                             if error != nil {
                                 errors += (error?.localizedDescription)!
                                 Helper.shared.showOKAlert(title: "Error", message: errors, viewController: self)
@@ -259,10 +312,11 @@ class SettingViewController: UIViewController {
                 let query = db.collection("users").whereField("ghostname", isEqualTo: self.ghostnameTextField.text!)
                 query.getDocuments(completion: { (snapshots, error) in
                     if (snapshots?.isEmpty)! {
-                        db.collection("users").document(uid).updateData(["ghostname": self.ghostnameTextField.text!]) { (error) in
+                        self.db.collection("users").document(uid).updateData(["ghostname": self.ghostnameTextField.text!]) { (error) in
                             if error != nil {
                                 errors += (error?.localizedDescription)!
                                 Helper.shared.showOKAlert(title: "Error", message: errors, viewController: self)
+                                return
                             }
                             else {
                                 self.user.ghostname = self.ghostnameTextField.text!
@@ -305,18 +359,28 @@ class SettingViewController: UIViewController {
         super.viewDidLoad()
         index = Client(appID: "NZJAE708OM", apiKey: "61672ad893ddeeb69532d2cd146c7913").index(withName: "users")
         Firestore.firestore().collection("users").document((Auth.auth().currentUser?.uid)!).getDocument { (document, error) in
-            if error != nil {
-                print(error?.localizedDescription as Any)
-            }
-            else{
-                if let data = document?.data() {
-                    let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String)
-                    self.user = user
-                    self.emailTextField.text = user.email
-                    self.usernameTextField.text = user.username
-                    self.ghostnameTextField.text = user.ghostname
-                    self.nameTextField.text = user.name
-                    self.passwordTextField.text = ""
+            if error != nil { return }
+            if let data = document?.data() {
+                let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String, profile_url: data["profile_url"] as! String)
+                self.user = user
+                self.emailTextField.text = user.email
+                self.usernameTextField.text = user.username
+                self.ghostnameTextField.text = user.ghostname
+                self.nameTextField.text = user.name
+                self.passwordTextField.text = ""
+                
+                // download and load the profile image of user from firestorage
+                let profileImageURL = user.profile_url
+                if profileImageURL != "" {
+                    let url = URL(string: profileImageURL)
+                    URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+                        if error != nil { return }
+                        // Move to a background thread to do some long running work
+                        // This is also the golden code to reload a specefic uielement on page after fetching data. !!
+                        DispatchQueue.main.async {
+                            self.profile.image = UIImage(data: data!)
+                        }
+                    }).resume()
                 }
             }
         }

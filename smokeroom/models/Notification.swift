@@ -9,12 +9,12 @@
 import UIKit
 
 class Notification {
-    let userid: String
-    let type: String
-    let type_id: String
-    let message: String
-    let date: String
-    let viewed: Bool
+    var userid: String
+    var type: String
+    var type_id: String
+    var message: String
+    var date: String
+    var viewed: Bool
     
     init(userid: String, type: String, type_id: String, message: String) {
         self.userid = userid

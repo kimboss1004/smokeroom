@@ -74,6 +74,16 @@ class RegisterViewController: UIViewController {
             }
             else if Auth.auth().currentUser != nil {
                 self.removeFromParentViewController()
+                Firestore.firestore().collection("users").document((Auth.auth().currentUser?.uid)!).getDocument { (document, error) in
+                    if error != nil {
+                        print(error?.localizedDescription as Any)
+                    }
+                    else{
+                        if let data = document?.data() {
+                            Helper.currentUser = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String, profile_url: data["profile_url"] as! String)
+                        }
+                    }
+                }
                 Helper.shared.switchStoryboard(vc: HomeViewController())
                 Helper.shared.showOKAlert(title: "Login Succesful", message: "Welcome", viewController: self)
                 return
@@ -158,10 +168,10 @@ class RegisterViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
             if(error == nil){
                 // create user in our personal User databse
-                let user = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email)
+                let user = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email, profile_url: "")
                 self.db.collection("users").document(Auth.auth().currentUser!.uid).setData(user.toAnyObject() as! [String : Any])
                 // set the current User so we can access easy
-                Helper.currentUser = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email)
+                Helper.currentUser = User(name: self.firstname + self.lastname, username: self.username, ghostname: self.ghostname, email: self.email, profile_url: "")
                 // index var is for algolia
                 self.index.addObject(["name": self.firstname + self.lastname, "username": self.username, "email": self.email], withID: (Auth.auth().currentUser?.uid)!)
                 Helper.shared.showOKAlert(title: "Welcome!", message: "You have succesfully registered.", viewController: self)

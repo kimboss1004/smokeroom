@@ -17,23 +17,26 @@ class Conversation {
     var buzz: Int
     let views: Int
     let date: String
+    let imageUrl: String
     
-    init(text: String, userid: String, ghostname: Bool) {
+    init(text: String, userid: String, ghostname: Bool, imageUrl: String) {
         self.text = text
         self.userid = userid
         self.ghostname = ghostname
         self.buzz = 0
         self.views = 0
         self.date = Helper.shared.getDate()
+        self.imageUrl = imageUrl
     }
     
-    init(text: String, userid: String, buzz: Int, ghostname: Bool, date: String) {
+    init(text: String, userid: String, buzz: Int, ghostname: Bool, date: String, imageUrl: String) {
         self.text = text
         self.userid = userid
         self.ghostname = ghostname
         self.buzz = buzz
         self.views = 0
         self.date = date
+        self.imageUrl = imageUrl
     }
     
     
@@ -69,10 +72,15 @@ class Conversation {
         }else{
             date = ""
         }
+        if let imageUrl = snapValue?["imageUrl"] as? String {
+            self.imageUrl = imageUrl
+        }else{
+            imageUrl = ""
+        }
     }
     
     func toAnyObject() -> AnyObject {
-        return ["text" : text, "userid" : userid, "ghostname" : ghostname, "buzz" : buzz, "views" : views, "date" : date] as AnyObject
+        return ["text" : text, "userid" : userid, "ghostname" : ghostname, "buzz" : buzz, "views" : views, "date" : date, "imageUrl" : imageUrl] as AnyObject
     }
     
 }

@@ -15,7 +15,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     var collectionView: UICollectionView!
     var friendIDS: [String]! = [String]()
     var potentialFriendIDS: [String]! = [String]()
-    var friendRequestIDS: [String]! = [String]() // matching pair of potentialFriendIDS
+    var friendRequestIDS: [String]! = [String]() // matching pair for potentialFriendIDS
     var userid: String!
     let db = Firestore.firestore()
     
@@ -78,6 +78,12 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
                     if let data = document?.data() {
                         friendCell.nameButton.setTitle((data["name"] as? String)!, for: .normal)
                         friendCell.usernameButton.setTitle((data["username"] as? String)!, for: .normal)
+                        if (data["profile_url"] as? String)! == "" {
+                            friendCell.profile.image = UIImage(named: "avatar")
+                        }
+                        else{
+                            friendCell.profile.loadImageUsingCacheWithUrlString((data["profile_url"] as? String)!)
+                        }
                     }
                 }
             }
@@ -112,7 +118,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
+        return CGSize(width: view.frame.width, height: 60)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -134,7 +140,8 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
         self.friendIDS = []
         self.potentialFriendIDS = []
         self.friendRequestIDS = []
-        let friend_requests_by_currentuser_query = db.collection("friendrequests").whereField("userid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+        // should be named friend_request_objects__ instead...
+        let friend_requests_by_currentuser_query = db.collection("friendrequests").whereField("userid", isEqualTo: userid as Any)
         friend_requests_by_currentuser_query.getDocuments { (snapshot, err) in
             if let err = err {
                 print("Error getting documents: \(err)")
@@ -147,7 +154,7 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
                     }
                 }
                 // now look for next type of friend requests
-                let friend_requests_for_currentuser_query = self.db.collection("friendrequests").whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
+                let friend_requests_for_currentuser_query = self.db.collection("friendrequests").whereField("friendid", isEqualTo: self.userid as Any)
                 friend_requests_for_currentuser_query.getDocuments { (snapshot, err) in
                     if let err = err {
                         print("Error getting documents: \(err)")
@@ -159,8 +166,11 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
                                 self.friendIDS.append(data["userid"] as! String)
                             }
                             else { // otherwise, it is still a pending friend request
-                                self.friendRequestIDS.append(document.documentID)
-                                self.potentialFriendIDS.append(data["userid"] as! String)
+                                // only if the current user is the subject of this FriendsController page
+                                if self.userid == Auth.auth().currentUser?.uid {
+                                    self.friendRequestIDS.append(document.documentID)
+                                    self.potentialFriendIDS.append(data["userid"] as! String)
+                                }
                             }
                         }
                         self.collectionView.reloadData()
@@ -208,12 +218,11 @@ class FriendsViewController: UIViewController, UICollectionViewDelegateFlowLayou
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        collectionView.reloadData()
+        fetchFriendsAndRequests()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchFriendsAndRequests()
         setupCollectionView()
         view.addSubview(dismissButton)
         view.addSubview(titleLabel)

@@ -15,19 +15,22 @@ class User {
     var username: String
     var ghostname: String
     var email: String
+    var profile_url: String
     
     init(){
         self.name = ""
         self.username = ""
         self.ghostname = ""
         self.email = ""
+        self.profile_url = ""
     }
     
-    init(name: String, username: String, ghostname: String, email: String){
+    init(name: String, username: String, ghostname: String, email: String, profile_url: String){
         self.name = name
         self.username = username
         self.ghostname = ghostname
         self.email = email
+        self.profile_url = profile_url
     }
     
     init(snapshot : DataSnapshot){
@@ -52,10 +55,15 @@ class User {
         }else{
             email = ""
         }
+        if let profile_url = snapValue?["profile_url"] as? String {
+            self.profile_url = profile_url
+        }else{
+            profile_url = ""
+        }
     }
     
     func toAnyObject() -> AnyObject {
-        return ["name" : name, "username" : username, "ghostname" : ghostname, "email" : email] as AnyObject
+        return ["name" : name, "username" : username, "ghostname" : ghostname, "email" : email, "profile_url" : profile_url] as AnyObject
     }
     
     

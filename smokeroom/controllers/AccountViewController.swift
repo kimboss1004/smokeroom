@@ -29,11 +29,6 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         return view
     }()
     
-    let conversation: Conversation = {
-        let c = Conversation(text: "I like apples and Bananas when I eat my coke and rum.", userid: "asdf23r", ghostname: false)
-        return c
-    }()
-    
     // Top Navbar items
     let header: UIView = {
         let view = UIView()
@@ -88,12 +83,16 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
             }
             else{
                 if let data = document?.data() {
-                    let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String)
+                    let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String, profile_url: data["profile_url"] as! String)
                     if conversation.ghostname {
                         cell.nameLabel.text = "Ghost"
                         cell.usernameLabel.text = user.ghostname
+                        cell.profile.image = UIImage(named: "logo")
                     }
                     else{
+                        if user.profile_url != "" {
+                            cell.profile.loadImageUsingCacheWithUrlString(user.profile_url)
+                        }
                         cell.nameLabel.text = user.name
                         cell.usernameLabel.text = "@" + user.username
                     }
@@ -113,7 +112,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         let size = CGSize(width: approximateWidthOfBioTextView, height: 1000)
         let attributes = [kCTFontAttributeName: UIFont.systemFont(ofSize: 15)]
         //if let user = self.datasource?.item(indexPath) as? User {
-        let estimateFrame = NSString(string: conversation.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes as [NSAttributedStringKey : Any], context: nil)
+        let estimateFrame = NSString(string: allConversations[indexPath.item].text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes as [NSAttributedStringKey : Any], context: nil)
         return CGSize(width: view.frame.width, height: estimateFrame.height + 85)
     }
     
@@ -154,7 +153,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                         let current_user_got_request_query = self.db.collection("friendrequests").whereField("userid", isEqualTo: self.accountid).whereField("friendid", isEqualTo: Auth.auth().currentUser?.uid as Any)
                         current_user_got_request_query.getDocuments(completion: { (snapshots, error) in
                             if !(snapshots?.isEmpty)! {
-                                // if snapshot exists, friend request exists
+                                // if snapshot exists, friend request to this user exists
                                 for document in snapshots!.documents {
                                     // if confirmation is true, hide button
                                     if document.data()["confirmed"] as! Bool == true {
@@ -162,7 +161,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                                         header.friendRequestButton.removeTarget(nil, action: nil, for: .allEvents)
                                     }
                                     else {
-                                        // else request not confirmed
+                                        // else request to this user is not confirmed
                                         header.friendRequestButton.setTitle("Accept Friend Request", for: .normal)
                                         header.friendRequestButton.removeTarget(nil, action: nil, for: .allEvents)
                                         self.friend_request_id = document.documentID
@@ -186,7 +185,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                 }
                 else{
                     if let data = document?.data() {
-                        let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String)
+                        let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String, profile_url: data["profile_url"] as! String)
                         header.namelabel.text = user.name
                         header.usernamelabel.text = "@" + user.username
                     }
@@ -215,14 +214,6 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
     }
     
     // ---------------------------------------------------------------------------------
-    @objc func conversationClickedButton(_ sender:UIButton!)
-    {
-        conversationVC.view = nil
-        conversationVC.conversation = allConversations[sender.tag]
-        conversationVC.conversationid = conversationIDS[sender.tag]
-        self.present(conversationVC, animated: true, completion: nil)
-    }
-    
     private func fetchConversations() {
         let query = db.collection("conversations").whereField("userid", isEqualTo: accountid as Any).order(by: "date", descending: true)
         query.getDocuments { (snapshot, err) in
@@ -234,7 +225,7 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
                 for document in snapshot!.documents {
                     let data = document.data()
                     self.conversationIDS.append(document.documentID)
-                    self.allConversations.append(Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String))
+                    self.allConversations.append(Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String, imageUrl: data["imageUrl"] as! String))
                 }
                 self.collectionView.reloadData()
             }
@@ -245,14 +236,18 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func conversationClickedButton(_ sender:UIButton!)
+    {
+        conversationVC.view = nil
+        conversationVC.conversation = allConversations[sender.tag]
+        conversationVC.conversationid = conversationIDS[sender.tag]
+        self.present(conversationVC, animated: true, completion: nil)
+    }
+    
     @objc func friendsButtonAction(_ sender:UIButton!)
     {
         friendsVC.userid = accountid
         self.present(friendsVC, animated: true, completion: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        fetchConversations()
     }
     
     @objc func friendrequestButtonAction(_ sender: UIButton! ) {
@@ -283,10 +278,13 @@ class AccountViewController: UIViewController, UICollectionViewDelegateFlowLayou
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        fetchConversations()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         usersReference = db.collection("users")
-        fetchConversations()
         view.backgroundColor = .white
         view.addSubview(header)
         header.addSubview(dismissButton)

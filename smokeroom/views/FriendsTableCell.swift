@@ -12,13 +12,16 @@ class FriendsTableCell: UITableViewCell {
     
     var userid: String!
     
-    let profile: UIButton = {
-        let button = UIButton()
-        button.setImage( #imageLiteral(resourceName: "profile_image"), for: .normal)
-        button.layer.cornerRadius = 40
-        button.clipsToBounds = true
-        return button
+    let profile: UIImageView = {
+        let view = UIImageView()
+        view.image = #imageLiteral(resourceName: "profile_image")
+        view.layer.cornerRadius = 27
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        view.contentMode = .scaleAspectFill
+        return view
     }()
+    
     
     let usernameButton: UIButton = {
         let button = UIButton()

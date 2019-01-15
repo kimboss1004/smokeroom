@@ -10,10 +10,14 @@ import UIKit
 
 class CommentsCell: UICollectionViewCell {
     
-    let profile: UIButton = {
-        let button = UIButton()
-        button.setImage( #imageLiteral(resourceName: "avatar"), for: .normal)
-        return button
+    let profile: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "avatar")
+        view.layer.cornerRadius = 32
+        view.clipsToBounds = true
+        view.isUserInteractionEnabled = true
+        view.contentMode = .scaleAspectFill
+        return view
     }()
     
     let nameLabel: UILabel = {
@@ -29,7 +33,7 @@ class CommentsCell: UICollectionViewCell {
         let label = UILabel()
         label.text = "@kimboss"
         label.backgroundColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 13)
         label.textColor = UIColor(red: 130/255, green: 130/255, blue: 130/255, alpha: 1.0)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -71,10 +75,10 @@ class CommentsCell: UICollectionViewCell {
         addSubview(usernameLabel)
         addSubview(dateLabel)
         addSubview(textLabel)
-        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 80, heightConstant: 35)
+        dateLabel.anchor(topAnchor, left: nil, bottom: nil, right: rightAnchor, topConstant: 0, leftConstant: 0, bottomConstant: 0, rightConstant: 10, widthConstant: 60, heightConstant: 35)
         profile.anchor(topAnchor, left: leftAnchor, bottom: nil, right: nil, topConstant: 3, leftConstant: 15, bottomConstant: 0, rightConstant: 0, widthConstant: 65, heightConstant: 65)
         nameLabel.anchor(topAnchor, left: profile.rightAnchor, bottom: nil, right: nil, topConstant: 0, leftConstant: 12, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)
-        usernameLabel.anchor(topAnchor, left: nameLabel.rightAnchor, bottom: nil, right: dateLabel.leftAnchor, topConstant: 0, leftConstant: 5, bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 35)
+        usernameLabel.anchor(nameLabel.topAnchor, left: nameLabel.rightAnchor, bottom: nil, right: dateLabel.leftAnchor, topConstant: 3, leftConstant: 0, bottomConstant: 10, rightConstant: 0, widthConstant: 0, heightConstant: 30)
         textLabel.anchor(nameLabel.bottomAnchor, left: profile.rightAnchor, bottom: bottomAnchor, right: rightAnchor, topConstant: 0, leftConstant: 10, bottomConstant: 0, rightConstant: 4, widthConstant: 0, heightConstant: 0)
     }
 

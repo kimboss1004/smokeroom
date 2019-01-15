@@ -18,10 +18,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
     var conversation_ids: [String]! = [String]()
     var newsfeed: [String: Conversation] = [String: Conversation]()
     
-    lazy var createVC: CreateViewController = {
-        let view = CreateViewController()
-        return view
-    }()
+    var createVC: CreateViewController!
     
     lazy var conversationVC: ConversationViewController = {
         let view = ConversationViewController()
@@ -73,26 +70,40 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ConversationCell
         let conversation = allConversations[indexPath.item]
         usersReference.document(conversation.userid).getDocument { (document, error) in
-            if error != nil {
-                print(error?.localizedDescription as Any)
-            }
+            if error != nil { return }
             else{
                 if let data = document?.data() {
-                    let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String)
+                    let user = User(name: data["name"] as! String, username: data["username"] as! String, ghostname: data["ghostname"] as! String, email: data["email"] as! String, profile_url: data["profile_url"] as! String)
                     if conversation.ghostname {
                         cell.nameLabel.text = "Ghost"
                         cell.usernameLabel.text = user.ghostname
+                        cell.profile.image = #imageLiteral(resourceName: "logo")
                     }
-                    else{
+                    else{ // if not a ghost post
                         cell.nameLabel.text = user.name
                         cell.usernameLabel.text = "@" + user.username
+                        // download & set profile
+                        if user.profile_url != "" {
+                            cell.profile.loadImageUsingCacheWithUrlString(user.profile_url)
+                        }
+                        else { // if you don't set each image, one ring will rule them all
+                            cell.profile.image = #imageLiteral(resourceName: "avatar")
+                        }
                     }
                 }
             }
         }
-        cell.textLabel.addTarget(self, action: #selector(conversationClickedButton(_:)), for: .touchUpInside)
+        if conversation.imageUrl != "" {
+            cell.imageView.loadImageUsingCacheWithUrlString(conversation.imageUrl)
+            cell.imageButton.tag = indexPath.item
+            cell.imageButton.addTarget(self, action: #selector(conversationClickedButtonAction(_:)), for: .touchUpInside)
+        }
+        else {
+            cell.imageView.image = UIImage()
+        }
+        cell.textLabel.addTarget(self, action: #selector(conversationClickedButtonAction(_:)), for: .touchUpInside)
         cell.textLabel.tag = indexPath.item
-        cell.buzz.text = "Comments: " + String(conversation.buzz)
+        cell.buzz.text = String(conversation.buzz)
         cell.textLabel.setTitle(conversation.text, for: .normal)
         cell.dateLabel.text = Helper.shared.formatStringToUserTime(stringDate: conversation.date)
         return cell
@@ -103,9 +114,15 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         let size = CGSize(width: approximateWidthOfBioTextView, height: 1000)
         let attributes = [kCTFontAttributeName: UIFont.systemFont(ofSize: 15)]
         let conversation = allConversations[indexPath.item] as Conversation
-        //if let user = self.datasource?.item(indexPath) as? User {
         let estimateFrame = NSString(string: conversation.text).boundingRect(with: size, options: .usesLineFragmentOrigin, attributes: attributes as [NSAttributedStringKey : Any], context: nil)
-        return CGSize(width: view.frame.width, height: estimateFrame.height + 80)
+        // if conversation contains an image, adjust cell size
+        if conversation.imageUrl == "" {
+            return CGSize(width: view.frame.width, height: estimateFrame.height + 110)
+        }
+        else {
+            // we add the width, because the image height is equal to width (square)
+            return CGSize(width: view.frame.width, height: estimateFrame.height + 110 + view.frame.size.width)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -125,23 +142,37 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         collectionView.contentInsetAdjustmentBehavior = .never
     }
     
-    // ---------------------------------------------------------------------------------------
+// button actions ---------------------------------------------------------------------------------------
     
     @objc func createButtonAction(_ sender:UIButton!) {
+        createVC = CreateViewController()
         self.present(createVC, animated: true, completion: nil)
     }
     
-    @objc func conversationClickedButton(_ sender:UIButton!) {
-        conversationVC.view = nil
-        print(sender.tag)
+    @objc func conversationClickedButtonAction(_ sender:UIButton!) {
+        conversationVC = ConversationViewController()
         conversationVC.conversation = allConversations[sender.tag]
         conversationVC.conversationid = conversation_ids[sender.tag]
         self.present(conversationVC, animated: false, completion: nil)
     }
     
+    // if image clicked, present the conversation controller
+    @objc func imageClickedAction(_ sender:UIImageView!) {
+        conversationVC = ConversationViewController()
+        conversationVC.conversation = allConversations[sender.tag]
+        conversationVC.conversationid = conversation_ids[sender.tag]
+        self.present(conversationVC, animated: false, completion: nil)
+    }
+    
+    @objc func selectProfileViewAction(){
+        dismiss(animated: true, completion: nil)
+    }
+    
     @objc func homeClickedButton(_ sender:UIButton!) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+// news feed fectching --------------------------------------------------------------------
     
     private func fetchNewsfeed() {
         // reset newsfeed to nil
@@ -158,7 +189,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             } else {
                 for document in snapshot!.documents {
                     let data = document.data()
-                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String)
+                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String, imageUrl: data["imageUrl"] as! String)
                 }
                 self.startFetches()
             }
@@ -212,7 +243,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
             } else {
                 for document in snapshot!.documents {
                     let data = document.data()
-                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String)
+                    self.newsfeed[(document.documentID)] = Conversation(text: data["text"] as! String, userid: data["userid"] as! String, buzz: data["buzz"] as! Int, ghostname: data["ghostname"] as! Bool, date: data["date"] as! String, imageUrl: data["imageUrl"] as! String)
                 }
                 // now get posts that freinds commented on.
                 self.fetchRelatedConversations(userid: userid)
@@ -241,7 +272,7 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
                         }
                         else{
                             if let data2 = document2?.data() {
-                                self.newsfeed[(document2?.documentID)!] = Conversation(text: data2["text"] as! String, userid: data2["userid"] as! String, buzz: data2["buzz"] as! Int, ghostname: data2["ghostname"] as! Bool, date: data2["date"] as! String)
+                                self.newsfeed[(document2?.documentID)!] = Conversation(text: data2["text"] as! String, userid: data2["userid"] as! String, buzz: data2["buzz"] as! Int, ghostname: data2["ghostname"] as! Bool, date: data2["date"] as! String, imageUrl: data2["imageUrl"] as! String)
                             }
                             // on last index of loop, sort the updated newsfeed
                             if index == (commented_conversation_ids.count - 1) {
@@ -268,12 +299,10 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         self.collectionView.reloadData()
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         usersReference = Firestore.firestore().collection("users")
         setupCollectionView()
-        fetchNewsfeed()
         view.backgroundColor = .white
         view.addSubview(header)
         view.addSubview(collectionView)
@@ -292,7 +321,10 @@ class RoomsViewController: UIViewController, UICollectionViewDelegateFlowLayout,
         fetchNewsfeed()
     }
     
-    
-    
-    
 }
+
+
+
+
+
+
